@@ -46,10 +46,10 @@ noncomputable def kappa (n : ℕ) (ε : ℝ) : ℝ :=
 noncomputable def theta (n : ℕ) (ε : ℝ) : ℝ := (1 - 1 / (ε * kappa n ε)) / ((n : ℝ) - 1)
 
 /-- **Lemma 5** (Baker–Harman, Math. Z. 221 (1996), Theorem 1), for dimension `n` and exponent
-`K`, exactly as quoted in the paper. This deep result is not proved here; it is taken as a
-hypothesis of Theorem 1. To keep the hypothesis as weak as possible all constants are
-existentially quantified, "sufficiently large `Q` and `R`" is `C₁ ≤ Q`, `R₀ ≤ R`, and the vector
-is required to have positive entries. -/
+`K`, in a slightly weaker form than quoted in the paper. This deep result is not proved here;
+it is taken as a hypothesis of Theorem 1. The constants are existentially quantified,
+"sufficiently large `Q` and `R`" is `C₁ ≤ Q`, `R₀ ≤ R`, and the vector is restricted to
+positive entries. These changes only weaken what is assumed. -/
 def BakerHarman (n : ℕ) (K : ℝ) : Prop :=
   ∃ C₁ c₂ R₀ : ℝ, 0 < c₂ ∧
     ∀ (a : Fin n → ℕ), (∀ i, 0 < a i) → ∀ Q R : ℝ, R₀ ≤ R →

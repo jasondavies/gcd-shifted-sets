@@ -7,8 +7,9 @@ R. Heyman, *Topics in divisibility: pairwise coprimality, the GCD of shifted set
 irreducibility*, PhD thesis, UNSW, 2015, doi:10.26190/unsworks/18489, Section 3.2 (joint work
 with I. E. Shparlinski; not in the journal paper).
 
-All entries are shifted by the same `j ≥ 0`. `t(a)` is the least `j` with
-`gcd(a₁ + j, …, aₙ + j) = 1`. Theorem 3.2.1: if `a` has two distinct entries then
+All entries are shifted by the same `j ≥ 0`. When such a shift exists, `t(a)` is the least
+`j` with `gcd(a₁ + j, …, aₙ + j) = 1`; otherwise `tShift` returns the default value `0`.
+Theorem 3.2.1: if `a` has two distinct entries then a successful shift exists and
 `t(a) ≪ log² 𝔥(a)`.
 
 As for Theorem 2 this is conditional on Iwaniec's bound (`IwaniecBound`). The proof uses
@@ -23,7 +24,11 @@ namespace ShiftedGcd
 
 variable {n : ℕ}
 
-/-- `t(a)`: the least `j ≥ 0` with `gcd(a₁ + j, …, aₙ + j) = 1`. -/
+/-- `t(a)`: the least `j ≥ 0` with `gcd(a₁ + j, …, aₙ + j) = 1`, when such a shift exists.
+If no successful shift exists, this returns `0` by the convention `sInf ∅ = 0` in `ℕ`.
+For example, `a = (2, 2)` has no successful nonnegative shift but has `tShift a = 0`.
+For vectors with two distinct entries, `uniformShift_exists` supplies a successful shift
+under the hypothesis `IwaniecBound`. -/
 noncomputable def tShift (a : Fin n → ℤ) : ℕ := sInf {j : ℕ | vgcd (fun i => a i + j) = 1}
 
 /-- If some entry is `±1` then `gcd(a) = 1`. -/
