@@ -6,7 +6,8 @@ import ShiftedGcd.Defs
 Unconditional. The construction uses the Chinese Remainder Theorem together with Chebyshev's
 lower bound for `π(x)`.
 
-The congruences in the paper should read `a_k ≡ -i_k (mod p_{i₁,…,iₙ})`, not `+i_k`.
+The paper takes primes `p > H`, but the construction does not need this: any distinct
+primes work.
 -/
 
 open Finset

@@ -339,7 +339,7 @@ lemma exists_coprime_divisor {a : Fin n → ℤ} (hn : 0 < n) (ha : vgcd a = 1) 
       _ ≤ cf i ^ #(univ : Finset (Fin n)) := prod_le_pow_card _ _ _ fun j _ => hi j (mem_univ j)
       _ = cf i ^ n := by rw [card_univ, Fintype.card_fin]
 
-/-- (11): for squarefree `d`, `U_d ≤ (h d^{-1/n} + 1) h^{n-1}`. -/
+/-- (13): for squarefree `d`, `U_d ≤ (h d^{-1/n} + 1) h^{n-1}`. -/
 lemma Ucount_le_squarefree {a : Fin n → ℤ} (hn : 0 < n) (ha : vgcd a = 1) (h : ℕ) {d : ℕ}
     (hd : Squarefree d) :
     (Ucount a h d : ℝ) ≤ ((h : ℝ) / (d : ℝ) ^ ((1 : ℝ) / n) + 1) * (h : ℝ) ^ (n - 1) := by

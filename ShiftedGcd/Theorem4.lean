@@ -8,12 +8,9 @@ Unconditional. The `(h 𝔥(a))^{o(1)}` factor is formalised in its usual unifor
 every `δ > 0` the bound holds with factor `(h 𝔥(a))^δ` and a constant depending only on
 `n` and `δ`.
 
-Corrections to the paper's argument:
-* The identity `R(a,h) = ∑_d μ(d) U_d(a,h)²` fails when `a · x = 0` has solutions with
-  positive `x`, which can happen when `a` has entries of both signs. Those `x` must be
-  discarded first; they contribute only `O(h^{2n-1})` pairs.
-* In (14), `D^{2n-1}` should be `D^{n-1}`.
-* In the evaluation of `M`, the tail term is `O(n/h)`, not `O(D⁻¹)`.
+Correction to the paper's argument: the identity `R(a,h) = ∑_d μ(d) U_d(a,h)²` fails when
+`a · x = 0` has solutions with positive `x`, which can happen when `a` has entries of both
+signs. Those `x` must be discarded first; they contribute only `O(h^{2n-1})` pairs.
 
 Outline of the formal proof (see `ShiftedGcd.Theorem4Count`, `ShiftedGcd.Theorem4Aux`):
 reduce to `gcd(a) = 1`; write `R = ∑_{d ≤ T} μ(d) V_d` with `T = n h 𝔥(a)` and
@@ -47,7 +44,7 @@ lemma pow_succ_sub_pow_succ_le {y z : ℝ} (hy : 0 ≤ y) (hyz : y ≤ z) (m : �
 
 variable {n : ℕ}
 
-/-- (9): for `1 ≤ d ≤ h`, `|U_d² - h^{2n}/d²| ≤ 2n (2h)^{2n-1} / d`. -/
+/-- (11): for `1 ≤ d ≤ h`, `|U_d² - h^{2n}/d²| ≤ 2n (2h)^{2n-1} / d`. -/
 lemma abs_sq_Ucount_sub {a : Fin n → ℤ} (hn : 1 ≤ n) (ha : vgcd a = 1) {h d : ℕ} (hd : 0 < d)
     (hdh : d ≤ h) :
     |(Ucount a h d : ℝ) ^ 2 - (h : ℝ) ^ (2 * n) / (d : ℝ) ^ 2| ≤

@@ -4,7 +4,7 @@ import Mathlib
 # Definitions for "On the Greatest Common Divisor of Shifted Sets"
 
 Formalisation of R. Heyman and I. E. Shparlinski, *On the greatest common divisor of shifted
-sets*, arXiv:1402.1208 (J. Number Theory 154 (2015), 63–73).
+sets*, J. Number Theory 154 (2015), 63–73, doi:10.1016/j.jnt.2015.02.012.
 
 Vectors `a ∈ ℤⁿ` are functions `Fin n → ℤ`; `a + h` is the pointwise sum.
 -/
