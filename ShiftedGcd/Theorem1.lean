@@ -11,9 +11,10 @@ gives a modulus `r ∣ aᵢ + hᵢ` with `r ≫ 𝔥(h) H^ϑ` and also `r ≥ R 
 this stronger form (`theorem1`). We then derive the gcd form in the range `H < 𝔥(a)`, where
 `a + h ≠ 0` automatically (`theorem1_gcd`).
 
-The paper's abstract also claims that `gcd(a + h)` is "much larger than `H`". The proof
-does not establish this: it only gives `r ≥ R ≍ H^{1/(εκ)}`, and `H^{1/(εκ)} < H` because
-`εκ > 1`.
+The paper's abstract also claims that `gcd(a + h)` is "much larger than `H`". That claim is
+false; see `ShiftedGcd.AbstractClaim`. The bound `r ≫ H^{1/(εκ)}` is weaker than the trivial
+`gcd(a + h) ≥ 2H + 1`, since `εκ > 1`. It is included only to rule out the degenerate choice
+`h = 0`. The real content of Theorem 1 is the ratio bound `r ≫ 𝔥(h) H^ϑ`.
 
 We also check the claims about `κ` made in the introduction: `κ` exists, is unique, and
 satisfies `εκ(n,ε) > 1`, which is what makes `ϑ > 0`.
