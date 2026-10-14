@@ -13,8 +13,10 @@ this stronger form (`theorem1`). We then derive the gcd form in the range `H < �
 
 The paper's abstract also claims that `gcd(a + h)` is "much larger than `H`". That claim is
 false; see `ShiftedGcd.AbstractClaim`. The bound `r ≫ H^{1/(εκ)}` is weaker than the trivial
-`gcd(a + h) ≥ 2H + 1`, since `εκ > 1`. It is included only to rule out the degenerate choice
-`h = 0`. The real content of Theorem 1 is the ratio bound `r ≫ 𝔥(h) H^ϑ`.
+`gcd(a + h) ≥ 2H + 1`, since `εκ > 1`. Its only role is to stop `h = 0` from proving the
+statement for every `a`. It does not force a nonzero shift: when `gcd(a)` is already large,
+`h = 0` remains a valid witness (e.g. `a = (A, …, A)` with `h = 0`, `r = A`). The real content of
+Theorem 1 is the ratio bound `r ≫ 𝔥(h) H^ϑ`.
 
 We also check the claims about `κ` made in the introduction: `κ` exists, is unique, and
 satisfies `εκ(n,ε) > 1`, which is what makes `ϑ > 0`.

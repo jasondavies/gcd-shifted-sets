@@ -35,8 +35,10 @@ as the paper quotes them, and are passed as explicit hypotheses rather than axio
   trivially true with `h = 0`. `theorem1` formalises what the proof actually gives: a common
   divisor `r` of all `aᵢ + hᵢ` with `r ≫ 𝔥(h) H^ϑ` and also `r ≫ H^{1/(εκ)}`. `theorem1_gcd`
   is the gcd form for `𝔥(a)^ε ≤ H < 𝔥(a)`, where `a + h ≠ 0` is automatic. The second
-  bound, `r ≫ H^{1/(εκ)}`, is weaker than the trivial `gcd ≥ 2H + 1`. It only serves to rule
-  out `h = 0`.
+  bound, `r ≫ H^{1/(εκ)}`, is weaker than the trivial `gcd ≥ 2H + 1`. Its only role is to
+  stop `h = 0` from proving the statement for every `a`. It does not force a nonzero shift:
+  when `gcd(a)` is already large, `h = 0` remains a valid witness, for example `a = (A, …, A)`
+  with `h = 0` and `r = A`.
 - **Abstract.** The claim that some shift makes the gcd "much larger than `H`" is false. For
   `a = (A, A + 2H + 1, A, …, A)`, every shift has `gcd(a + h) ≤ 4H + 1`, because the gcd
   divides `2H + 1 + h₂ − h₁`. Choosing `A ≈ H^{1/ε}` puts this inside the hypotheses of
