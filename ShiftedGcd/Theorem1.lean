@@ -116,10 +116,6 @@ theorem theta_pos {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε
 
 lemma height_zero {n : ℕ} : height (0 : Fin n → ℤ) = 0 := by simp [height]
 
-lemma natAbs_le_height {n : ℕ} (x : Fin n → ℤ) (i : Fin n) :
-    ((x i).natAbs : ℝ) ≤ height x := by
-  exact_mod_cast Finset.le_sup (f := fun i => (x i).natAbs) (mem_univ i)
-
 lemma height_le_of_abs_le {n : ℕ} (x : Fin n → ℤ) (B : ℝ) (hB : 0 ≤ B)
     (h : ∀ i, |(x i : ℝ)| ≤ B) : (height x : ℝ) ≤ B := by
   unfold height
@@ -231,7 +227,7 @@ theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε 
   have hM : ∀ i, (a' i : ℝ) ≤ Real.exp (t * ε⁻¹) := by
     intro i; simp only [ha']; split_ifs with h
     · rw [Nat.cast_one]; exact Real.one_le_exp (by positivity)
-    · exact (natAbs_le_height a i).trans hha
+    · exact (Nat.cast_le.2 (natAbs_le_height a i)).trans hha
   have hsqrt : Real.sqrt (∑ i, ((a' i : ℝ)) ^ 2) ≤ (Real.exp v) ^ K := by
     rw [← Real.exp_mul]
     have hvK : v * K = Real.log n * K + t * ε⁻¹ := by

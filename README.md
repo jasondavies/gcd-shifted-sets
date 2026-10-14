@@ -17,7 +17,7 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 
 | Paper | Lean | Status |
 |---|---|---|
-| Definitions (`𝔥`, `gcd`, `L`, `ℓ`, `R`, `κ`, `ϑ`) | `ShiftedGcd/Defs.lean` | |
+| Definitions (`𝔥`, `gcd`, `L`, `ℓ`, `R`, `κ`, `ϑ`) | `ShiftedGcd/Defs.lean` (`t(a)` is `tShift` in `UniformShift.lean`) | |
 | Claims about `κ(n,ε)` (existence, uniqueness, `ϑ > 0`) | `kappa_existsUnique`, `theta_pos` | proved |
 | Theorem 1 | `theorem1`, `theorem1_gcd` | proved, assuming Lemma 5 (Baker–Harman) as hypothesis `BakerHarman` |
 | Theorem 2 | `theorem2`, `theorem2_L` | proved, assuming Lemma 6 (Iwaniec) as hypothesis `IwaniecBound` |
@@ -26,8 +26,11 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 | Thesis Theorem 3.2.1: `t(a) ≪ log² 𝔥(a)` (uniform shift) | `uniformShift_exists`, `tShift_le` | proved, assuming Lemma 6 (Iwaniec) as hypothesis `IwaniecBound` |
 | Abstract: gcd "much larger than `H`" | `abstract_claim_false`, `not_gcd_much_larger` | **disproved** (`AbstractClaim.lean`) |
 
-The two deep external results (Lemmas 5 and 6) are stated in `Defs.lean` as `Prop`s, exactly
-as the paper quotes them, and are passed as explicit hypotheses rather than axioms.
+The two deep external results (Lemmas 5 and 6) are stated in `Defs.lean` as `Prop`s and are
+passed as explicit hypotheses rather than axioms. Lemma 6 is stated as the paper quotes it.
+Lemma 5 (`BakerHarman`) is stated in a slightly weaker form: the vector must have positive
+entries, the constants are existentially quantified, and "sufficiently large `R`" becomes
+`R ≥ R₀`. Each change only weakens what is assumed.
 
 ## Deviations from the paper
 
@@ -39,6 +42,13 @@ as the paper quotes them, and are passed as explicit hypotheses rather than axio
   stop `h = 0` from proving the statement for every `a`. It does not force a nonzero shift:
   when `gcd(a)` is already large, `h = 0` remains a valid witness, for example `a = (A, …, A)`
   with `h = 0` and `r = A`.
+- **Theorem 2.** The bound needs `𝔥(a) ≥ 2`. The greedy construction must keep the shifted
+  entries nonzero. The paper's remark that `𝔥(a)` can be replaced by the second-largest `|aᵢ|`
+  is not formalised.
+- **Theorem 3.** The primes need not exceed `H`.
+- **Theorem 4.** `(h𝔥(a))^{o(1)}` is read as "for every `δ > 0`, `≪_{n,δ} (h𝔥(a))^δ`". The
+  Möbius identity `R = Σ μ(d) U_d²` fails when `a·x = 0` has positive solutions (possible when
+  `a` has entries of both signs). Those pairs are removed first.
 - **Abstract.** The claim that some shift makes the gcd "much larger than `H`" is false. For
   `a = (A, A + 2H + 1, A, …, A)`, every shift has `gcd(a + h) ≤ 4H + 1`, because the gcd
   divides `2H + 1 + h₂ − h₁`. Choosing `A ≈ H^{1/ε}` puts this inside the hypotheses of
@@ -51,10 +61,3 @@ as the paper quotes them, and are passed as explicit hypotheses rather than axio
 - **Thesis Theorem 3.2.1.** The thesis bounds `ω(aᵣ − aₛ) log ω(aᵣ − aₛ)` by
   `ω(𝔥(a)) log ω(𝔥(a))`, which does not follow because `ω` is not monotone. We use
   `ω(m) log ω(m) ≪ log m` with `m = |aᵣ − aₛ| ≤ 2𝔥(a)` instead.
-- **Theorem 2.** The bound needs `𝔥(a) ≥ 2`. The greedy construction must keep the shifted
-  entries nonzero. The paper's remark that `𝔥(a)` can be replaced by the second-largest `|aᵢ|`
-  is not formalised.
-- **Theorem 3.** The primes need not exceed `H`.
-- **Theorem 4.** `(h𝔥(a))^{o(1)}` is read as "for every `δ > 0`, `≪_{n,δ} (h𝔥(a))^δ`". The
-  Möbius identity `R = Σ μ(d) U_d²` fails when `a·x = 0` has positive solutions (possible when
-  `a` has entries of both signs). Those pairs are removed first.

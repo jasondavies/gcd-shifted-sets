@@ -78,8 +78,6 @@ lemma exists_primes (N X : ℕ) (h : N ≤ Nat.primeCounting X) :
     omega
   have := Nat.nth_lt_of_lt_count this
   omega
-lemma natAbs_le_height {n : ℕ} (x : Fin n → ℤ) (i : Fin n) : (x i).natAbs ≤ height x :=
-  Finset.le_sup (f := fun i => (x i).natAbs) (Finset.mem_univ i)
 
 lemma exists_shift_one {n : ℕ} (hn : 1 ≤ n) (a : Fin n → ℤ) :
     ∃ h : Fin n → ℤ, height h ≤ height a + 1 ∧ vgcd (a + h) = 1 := by

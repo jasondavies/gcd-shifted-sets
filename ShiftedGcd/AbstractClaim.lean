@@ -30,12 +30,6 @@ namespace ShiftedGcd
 
 variable {n : ℕ}
 
-private lemma natAbs_le_height (x : Fin n → ℤ) (i : Fin n) : (x i).natAbs ≤ height x :=
-  Finset.le_sup (f := fun i => (x i).natAbs) (mem_univ i)
-
-private lemma vgcd_dvd (x : Fin n → ℤ) (i : Fin n) : (vgcd x : ℤ) ∣ x i :=
-  Int.natCast_dvd.2 (Finset.gcd_dvd (mem_univ i))
-
 /-- Trivial lower bound: if `H < 𝔥(a)`, some shift of height `≤ H` gives `gcd(a + h) ≥ 2H + 1`. -/
 theorem exists_shift_vgcd_ge (a : Fin n → ℤ) (H : ℕ) (hH : H < height a) :
     ∃ h : Fin n → ℤ, height h ≤ H ∧ 2 * H + 1 ≤ vgcd (a + h) := by

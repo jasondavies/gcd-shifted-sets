@@ -91,4 +91,12 @@ def boxVecs (n h : ℕ) : Finset (Fin n → ℤ) := Fintype.piFinset fun _ => Ic
 def R (a : Fin n → ℤ) (h : ℕ) : ℕ :=
   ((boxVecs n h ×ˢ boxVecs n h).filter fun p => vgcd a = Int.gcd (dot a p.1) (dot a p.2)).card
 
+/-! ### Basic facts -/
+
+lemma natAbs_le_height (x : Fin n → ℤ) (i : Fin n) : (x i).natAbs ≤ height x :=
+  Finset.le_sup (f := fun i => (x i).natAbs) (mem_univ i)
+
+lemma vgcd_dvd (x : Fin n → ℤ) (i : Fin n) : (vgcd x : ℤ) ∣ x i :=
+  Int.natCast_dvd.2 (Finset.gcd_dvd (mem_univ i))
+
 end ShiftedGcd

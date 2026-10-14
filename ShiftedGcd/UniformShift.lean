@@ -26,12 +26,6 @@ variable {n : ℕ}
 /-- `t(a)`: the least `j ≥ 0` with `gcd(a₁ + j, …, aₙ + j) = 1`. -/
 noncomputable def tShift (a : Fin n → ℤ) : ℕ := sInf {j : ℕ | vgcd (fun i => a i + j) = 1}
 
-private lemma natAbs_le_height' (x : Fin n → ℤ) (i : Fin n) : (x i).natAbs ≤ height x :=
-  Finset.le_sup (f := fun i => (x i).natAbs) (mem_univ i)
-
-private lemma vgcd_dvd' (x : Fin n → ℤ) (i : Fin n) : (vgcd x : ℤ) ∣ x i :=
-  Int.natCast_dvd.2 (Finset.gcd_dvd (mem_univ i))
-
 /-- If some entry is `±1` then `gcd(a) = 1`. -/
 private lemma vgcd_eq_one_of_unit (x : Fin n → ℤ) (i : Fin n) (hi : (x i).natAbs = 1) :
     vgcd x = 1 :=
@@ -53,8 +47,8 @@ theorem uniformShift_exists (hI : IwaniecBound) (n : ℕ) :
     have := Real.log_two_gt_d9; linarith
   refine ⟨36 * C + 5, fun a ⟨r, s, hrs⟩ => ?_⟩
   set x := height a with hx
-  have hr := natAbs_le_height' a r
-  have hs := natAbs_le_height' a s
+  have hr := natAbs_le_height a r
+  have hs := natAbs_le_height a s
   -- `𝔥(a) = 1`: entries lie in `{-1, 0, 1}` and two differ, so one of them is `±1`
   rcases Nat.lt_or_ge x 2 with hx2 | hx2
   · refine ⟨0, ?_, by simp only [Nat.cast_zero]; positivity⟩
@@ -77,9 +71,9 @@ theorem uniformShift_exists (hI : IwaniecBound) (n : ℕ) :
   obtain ⟨k, -, hkB, -, hgcd⟩ := Thm2.exists_good_shift C hC0' hC P hP0 (a s) _ hT
   refine ⟨k, ?_, ?_⟩
   · -- `gcd(a + k)` divides `a s + k` and `(a r + k) - (a s + k) = P`
-    have h1 : (vgcd (fun i => a i + k) : ℤ) ∣ a s + k := vgcd_dvd' _ s
+    have h1 : (vgcd (fun i => a i + k) : ℤ) ∣ a s + k := vgcd_dvd _ s
     have h2 : (vgcd (fun i => a i + k) : ℤ) ∣ P := by
-      have := dvd_sub (vgcd_dvd' (fun i => a i + k) r) h1
+      have := dvd_sub (vgcd_dvd (fun i => a i + k) r) h1
       simpa [hP] using this
     have := Int.dvd_gcd h1 h2
     rw [hgcd] at this
