@@ -17,10 +17,11 @@ Conversely, `gcd(a + h) ≥ 2H + 1` is always attainable when `H < 𝔥(a)`: shi
 multiple of `2H + 1` (`exists_shift_vgcd_ge`). So in the worst case the largest attainable gcd
 is `Θ(H)`.
 
-This is probably a typo. The paper writes the height as a script `ℋ`, and "much larger than
-`ℋ(h)`" is exactly what Theorem 1 says: `gcd(a + h) ≫ 𝔥(h) H^ϑ`. Our `theorem1` formalises
-that reading. The sentence was added in the journal version; the arXiv abstract does not contain
-it.
+The sentence is probably a misstatement of Theorem 1. The paper writes the height as a
+script `ℋ`, and "much larger than `ℋ(h)`" is exactly what Theorem 1 says:
+`gcd(a + h) ≫ 𝔥(h) H^ϑ`. Our `theorem1` formalises that reading. The sentence was added in the
+journal version; the arXiv abstract does not contain it. It is repeated word for word in the
+chapter overview of Heyman's PhD thesis (UNSW, 2015), so it is unlikely to be a one-off slip.
 -/
 
 open Finset

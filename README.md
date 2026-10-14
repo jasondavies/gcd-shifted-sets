@@ -5,6 +5,13 @@ A Lean 4 / Mathlib formalisation of
 > R. Heyman, I. E. Shparlinski, *On the greatest common divisor of shifted sets*,
 > J. Number Theory 154 (2015), 63–73, [doi:10.1016/j.jnt.2015.02.012](https://doi.org/10.1016/j.jnt.2015.02.012).
 
+The same material appears as Section 3.1 of Heyman's PhD thesis. Its Section 3.2 adds a
+result on uniform shifts, which is also formalised here:
+
+> R. Heyman, *Topics in divisibility: pairwise coprimality, the GCD of shifted sets and
+> polynomial irreducibility*, PhD thesis, UNSW Sydney, 2015,
+> [doi:10.26190/unsworks/18489](https://doi.org/10.26190/unsworks/18489).
+
 Build with `lake exe cache get && lake build`. There are no `sorry`s, and every main theorem
 depends only on the standard axioms `propext`, `Classical.choice` and `Quot.sound`.
 
@@ -16,6 +23,7 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 | Theorem 2 | `theorem2`, `theorem2_L` | proved, assuming Lemma 6 (Iwaniec) as hypothesis `IwaniecBound` |
 | Theorem 3 | `theorem3`, `theorem3_ell` | proved unconditionally |
 | Theorem 4 | `theorem4` | proved unconditionally (with the divisor bound in `DivisorBound.lean`) |
+| Thesis Theorem 3.2.1: `t(a) ≪ log² 𝔥(a)` (uniform shift) | `uniformShift_exists`, `tShift_le` | proved, assuming Lemma 6 (Iwaniec) as hypothesis `IwaniecBound` |
 | Abstract: gcd "much larger than `H`" | `abstract_claim_false`, `not_gcd_much_larger` | **disproved** (`AbstractClaim.lean`) |
 
 The two deep external results (Lemmas 5 and 6) are stated in `Defs.lean` as `Prop`s, exactly
@@ -34,8 +42,13 @@ as the paper quotes them, and are passed as explicit hypotheses rather than axio
   divides `2H + 1 + h₂ − h₁`. Choosing `A ≈ H^{1/ε}` puts this inside the hypotheses of
   Theorem 1, with all entries positive. On the other hand, `gcd ≥ 2H + 1` is always attainable
   when `H < 𝔥(a)` (`exists_shift_vgcd_ge`). So in the worst case the largest attainable gcd is
-  `Θ(H)`. This is probably a typo for "much larger than `𝔥(h)`" (the paper writes the height
-  as a script `ℋ`), which is what Theorem 1 says. The sentence is not in the arXiv abstract.
+  `Θ(H)`. The sentence is probably a misstatement of Theorem 1, which says the gcd is much
+  larger than `𝔥(h)`; the paper writes the height as a script `ℋ`. The sentence is not in
+  the arXiv abstract. It is repeated word for word in the thesis's chapter overview, so it is
+  unlikely to be a one-off slip.
+- **Thesis Theorem 3.2.1.** The thesis bounds `ω(aᵣ − aₛ) log ω(aᵣ − aₛ)` by
+  `ω(𝔥(a)) log ω(𝔥(a))`, which does not follow because `ω` is not monotone. We use
+  `ω(m) log ω(m) ≪ log m` with `m = |aᵣ − aₛ| ≤ 2𝔥(a)` instead.
 - **Theorem 2.** The bound needs `𝔥(a) ≥ 2`. The greedy construction must keep the shifted
   entries nonzero. The paper's remark that `𝔥(a)` can be replaced by the second-largest `|aᵢ|`
   is not formalised.
