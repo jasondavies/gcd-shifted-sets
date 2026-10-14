@@ -1,4 +1,4 @@
-name = "shiftedgcd"
+name = "gcd_shifted_sets"
 version = "0.1.0"
 defaultTargets = ["ShiftedGcd"]
 

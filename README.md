@@ -1,4 +1,4 @@
-# Shifted GCD
+# GCD of Shifted Sets
 
 A Lean 4 / Mathlib formalisation of
 
