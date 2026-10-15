@@ -59,7 +59,8 @@ The original Baker–Harman equation (2.1), p. 62, uses the integer
 this is smaller than `gammaBH K`, so that theorem does not directly establish this
 hypothesis. `ShiftedGcd.BakerHarmanExponent` proves that retaining the saving in the
 original exponent-pair estimate leaves enough numerical margin for a modified cutoff
-in the proof. The analytic and lattice arguments remain to be formalised. -/
+in the proof. The analytic estimates and large-vector lattice induction are proved in
+`ShiftedGcd.BakerHarman`; the final simultaneous-approximation argument remains unfinished. -/
 def BakerHarman (n : ℕ) (K : ℝ) : Prop :=
   ∃ C₁ c₂ R₀ : ℝ, 0 < c₂ ∧
     ∀ (a : Fin n → ℕ), (∀ i, 0 < a i) → ∀ Q R : ℝ, R₀ ≤ R →

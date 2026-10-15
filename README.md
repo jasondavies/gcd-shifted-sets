@@ -106,8 +106,14 @@ The constants are uniform over ambient spaces and lattices of a fixed dimension.
 proves the one-dimensional large-vector approximation case. The lattice modules
 also prove primitive-normal reduction, the exact hyperplane covolume formula,
 dual norm and covolume lower bounds, scaling, and lifting approximations from a
-scaled hyperplane lattice. The higher-dimensional induction and final simultaneous
-approximation remain unfinished; the original theorem's exponents have not changed.
+scaled hyperplane lattice.
+[`BakerHarman/DimensionInduction.lean`](ShiftedGcd/BakerHarman/DimensionInduction.lean)
+proves the large-vector approximation in every positive dimension, with constants
+and a logarithmic degree depending only on the dimension and `K`. The induction
+preserves `Q ≤ R^γ(K)` exactly; its output interval is bounded by
+`B R Q (log Q + 1)^m / ρ`, where `ρ ≥ 1` is a lower bound for nonzero lattice lengths.
+The final simultaneous approximation argument, including its small-vector case,
+remains unfinished; Theorem 1 is still conditional and its exponents have not changed.
 
 Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
 The proof uses the stronger quadratic Jacobsthal bound from
