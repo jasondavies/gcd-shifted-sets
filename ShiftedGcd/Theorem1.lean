@@ -1,4 +1,5 @@
-import ShiftedGcd.BakerHarman.EqualWeights
+import ShiftedGcd.Defs
+import BakerHarman.EqualWeights
 
 /-!
 # Theorem 1: large gcd after small shifts
@@ -22,7 +23,7 @@ We also check the claims about `κ` made in the introduction: `κ` exists, is un
 satisfies `εκ(n,ε) > 1`, which is what makes `ϑ > 0`.
 -/
 
-open Finset
+open Finset BakerHarman
 
 namespace ShiftedGcd
 

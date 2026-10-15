@@ -1,4 +1,4 @@
-import Mathlib
+import BakerHarman.Defs
 
 /-!
 # Definitions for "On the Greatest Common Divisor of Shifted Sets"
@@ -24,15 +24,10 @@ def vgcd (x : Fin n → ℤ) : ℕ := univ.gcd fun i => (x i).natAbs
 /-- The dot product `a · x = ∑ aᵢ xᵢ`. -/
 def dot (a x : Fin n → ℤ) : ℤ := ∑ i, a i * x i
 
-/-- `‖ξ‖`: the distance from a real number to the nearest integer. -/
-noncomputable def distNearestInt (ξ : ℝ) : ℝ := |ξ - round ξ|
+/- Compatibility names for the shared small-remainders definitions. -/
+export BakerHarman (distNearestInt gammaBH)
 
 /-! ### Theorem 1 -/
-
-/-- The exponent `γ(K) = 1 / (2^{2 + max{1,K}} - 4)` quoted in the shifted-sets paper's
-Lemma 5. Baker–Harman's original equation (2.1) instead uses
-`1 / (2^{k + 1} - 4)`, where `k = ⌈1 + max{K,1}⌉`; see `BakerHarman`. -/
-noncomputable def gammaBH (K : ℝ) : ℝ := 1 / ((2 : ℝ) ^ (2 + max 1 K) - 4)
 
 /-- `κ` solves equation (2): `n(εκ - 1)/(n - 1) = γ(κ)`, `κ > 0`. -/
 def IsKappa (n : ℕ) (ε κ : ℝ) : Prop :=
@@ -58,10 +53,10 @@ The constants are existentially quantified, "sufficiently large `Q` and `R`" is
 The original Baker–Harman equation (2.1), p. 62, uses the integer
 `k = ⌈1 + max{K,1}⌉` and exponent `1 / (2^{k + 1} - 4)`. For noninteger `K > 1`,
 this is smaller than `gammaBH K`, so that theorem does not directly establish this
-statement. `ShiftedGcd.BakerHarmanExponent` proves that retaining the saving in the
+statement. `BakerHarman.Exponent` proves that retaining the saving in the
 original exponent-pair estimate leaves enough numerical margin for a modified cutoff.
 The analytic estimates, lattice induction, and final equal-weight approximation are
-proved in `ShiftedGcd.BakerHarman`, preserving the power exponent used by Theorem 1. -/
+proved in the standalone `BakerHarman` library, preserving the power exponent used by Theorem 1. -/
 def BakerHarman (n : ℕ) (K : ℝ) : Prop :=
   ∃ C₁ c₂ R₀ : ℝ, 0 < c₂ ∧
     ∀ (a : Fin n → ℕ), (∀ i, 0 < a i) → ∀ Q R : ℝ, R₀ ≤ R →

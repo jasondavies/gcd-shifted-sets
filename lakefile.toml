@@ -18,5 +18,5 @@ name = "jacobsthal"
 path = "vendor/jacobsthal"
 
 [[require]]
-name = "baker_harman_analytics"
-path = "vendor/baker-harman-analytics"
+name = "baker_harman_small_remainders"
+path = "../baker-harman-small-remainders"
