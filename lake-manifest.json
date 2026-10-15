@@ -3,6 +3,13 @@
  "packages":
  [{"type": "path",
    "scope": "",
+   "name": "baker_harman_analytics",
+   "manifestFile": "lake-manifest.json",
+   "inherited": false,
+   "dir": "vendor/baker-harman-analytics",
+   "configFile": "lakefile.toml"},
+  {"type": "path",
+   "scope": "",
    "name": "jacobsthal",
    "manifestFile": "lake-manifest.json",
    "inherited": false,

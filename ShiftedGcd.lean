@@ -1,4 +1,5 @@
 import ShiftedGcd.Defs
+import ShiftedGcd.BakerHarman.DyadicSelection
 import ShiftedGcd.Iwaniec
 import ShiftedGcd.AbstractClaim
 import ShiftedGcd.DivisorBound

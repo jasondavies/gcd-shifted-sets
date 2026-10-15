@@ -52,9 +52,38 @@ leaves a positive margin `s(K) - 5γ(K)/4 ≥ γ(K)/12`; the module also proves 
 any fixed multiple of `R^(1-s(K))` is eventually at most half this cutoff,
 uniformly for `0 < Q ≤ R^γ(K)`. This supplies the exponent bookkeeping needed to
 adapt the original proof without changing `γ`, `κ` or `ϑ`.
-The exponential-sum bound, Fourier detection lemma, lattice induction and final
-approximation argument remain to be formalised. **Theorem 1 is still conditional**
-on `BakerHarman`; the new module proves numerical inequalities, not that hypothesis.
+The Fourier detection lemma, lattice induction and final approximation argument
+remain to be formalised. **Theorem 1 is still conditional** on `BakerHarman`.
+
+The analytic proof starts in
+[`BakerHarman/ReciprocalSum.lean`](ShiftedGcd/BakerHarman/ReciprocalSum.lean).
+It proves the base-order estimate `|Σ e(z/r)| ≤ 252(√R + R²/|z|)` for
+`0 < |z| ≤ R²` on natural subintervals of `[R,2R)`, including real `R ≥ 1`.
+[`BakerHarman/HigherDerivative.lean`](ShiftedGcd/BakerHarman/HigherDerivative.lean)
+also proves explicit bounds at every higher derivative order, using an optimized
+van der Corput induction. [`BakerHarman/PowerBands.lean`](ShiftedGcd/BakerHarman/PowerBands.lean)
+converts them to power savings on explicit numerator bands and combines finite chains
+of overlapping bands. [`BakerHarman/BandSelection.lean`](ShiftedGcd/BakerHarman/BandSelection.lean)
+selects bands covering the full range, and
+[`BakerHarman/ExponentialSum.lean`](ShiftedGcd/BakerHarman/ExponentialSum.lean)
+proves `|Σ e(z/r)| ≤ C(R^(1-6γ(K)/5) + R²/|z|)` for
+`0 < |z| ≤ R^(K+1)`, `K ≥ 1`, on closed integer subintervals of `[R,2R]`.
+Allowing any fixed factor in the numerator range retains saving `23γ(K)/20`
+for sufficiently large `R`. [`BakerHarman/LargeSums.lean`](ShiftedGcd/BakerHarman/LargeSums.lean)
+then proves that a sum of size at least `T ≥ R Q^(-11/10)` has
+`|z| ≤ C R²/T`, uniformly for `0 < Q ≤ R^γ(K)`. This completes the analytic
+input to the lattice argument, using a different saving and cutoff from the
+original exponent-pair bookkeeping above. The Fourier/lattice arguments remain unfinished.
+[`BakerHarman/DyadicSelection.lean`](ShiftedGcd/BakerHarman/DyadicSelection.lean)
+proves the finite counting steps: discarding small sums, selecting a dyadic class,
+bounding the number of classes logarithmically, and finding a small scalar product
+or a small difference by the box argument, including singleton classes.
+The derivative and differencing estimates use fifteen Apache-2.0 sources from the
+same pinned `openai/math` revision, in `vendor/baker-harman-analytics`.
+Only their import paths are relocated to avoid overlapping Lake module roots;
+`python3 scripts/check_baker_harman_sources.py` verifies local and upstream hashes,
+the import-only relocation, and the exact dependency closure. The axiom audit below
+also checks every imported declaration in their `OAI.Problem337` namespace.
 
 Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
 The proof uses the stronger quadratic Jacobsthal bound from

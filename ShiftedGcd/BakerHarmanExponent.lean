@@ -30,9 +30,10 @@ small sums then total `O(R * Q^(-1/4))`, negligible for large `Q`. Since
 reciprocal term `R²/|z|` to control large sums as in the original argument.
 `bakerHarman_power_term_absorbed` verifies this absorption uniformly in `Q`.
 
-This supplies the numerical margin for adapting the proof. The exponential-sum
-bound, Fourier detection lemma, lattice induction and final approximation step
-remain to be formalised before the hypothesis `BakerHarman` can be discharged.
+This supplies the numerical margin for adapting the proof. The separate
+`BakerHarman.ExponentialSum` module proves the analytic bound using saving
+`6 * gammaBH K / 5`. The Fourier detection lemma, lattice induction and final
+approximation step remain before the hypothesis `BakerHarman` can be discharged.
 -/
 
 namespace ShiftedGcd
