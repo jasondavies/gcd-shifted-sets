@@ -12,8 +12,8 @@ result on uniform shifts, which is also formalised here:
 > polynomial irreducibility*, PhD thesis, UNSW Sydney, 2015,
 > [doi:10.26190/unsworks/18489](https://doi.org/10.26190/unsworks/18489).
 
-Keep the standalone `baker-harman-small-remainders` checkout beside this repository
-at `../baker-harman-small-remainders` (a local Lake dependency until publication).
+Lake fetches the standalone `baker-harman-small-remainders` library from its pinned
+Git revision automatically.
 Build with `lake exe cache get && lake build`. There are no `sorry`s, and every main theorem
 depends only on the standard axioms `propext`, `Classical.choice` and `Quot.sound`.
 
@@ -30,7 +30,7 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 | Abstract: gcd "much larger than `H`" | `abstract_claim_false`, `not_gcd_much_larger` | **disproved** (`AbstractClaim.lean`) |
 
 Theorem 1 uses `BakerHarman.bakerHarman_equal_weights` from the standalone
-[Baker–Harman small-remainders library](../baker-harman-small-remainders/README.md).
+[Baker–Harman small-remainders library](https://github.com/jasondavies/baker-harman-small-remainders/tree/50d3a37e1350627349a640fbb9f6bf084f73bc60).
 For `n ≥ 2`, `K ≥ 1`, sufficiently large `Q,R`, `Q ≤ R^γ(K)`, and a nonnegative
 vector of Euclidean norm at most `R^K`, it supplies an integer modulus
 `R ≤ r ≤ 2QR` with every coordinate's nearest-integer error at most `Q^(-1/n)`.
@@ -42,13 +42,13 @@ The standalone library adapts Baker–Harman's proof to retain the stronger expo
 quoted in the shifted-sets paper. Its README explains the discrepancy with the
 original rounded exponent, the analytic estimates, and the lattice argument.
 It owns the proofs, the sixteen vendored analytic sources, their provenance, and
-`scripts/check_baker_harman_sources.py`. Run that source check from the library's
-directory. This project's axiom audit also checks all imported `BakerHarman`,
+`scripts/check_baker_harman_sources.py`. Run that source check from a standalone
+checkout outside a `.lake` directory (the pinned version's checker skips paths
+containing `.lake`). This project's axiom audit also checks all imported `BakerHarman`,
 `OAI.Problem337`, and `OAI.Erdos3` declarations.
 
-The local dependency is configured in `lakefile.toml`; once the library is published,
-replace its `path` with the Git URL and a pinned commit in `rev`, then run
-`lake update baker_harman_small_remainders`.
+The dependency is pinned in `lakefile.toml` and `lake-manifest.json`; a sibling
+checkout is not required.
 
 Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
 The proof uses the stronger quadratic Jacobsthal bound from

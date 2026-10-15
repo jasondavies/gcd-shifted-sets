@@ -19,4 +19,5 @@ path = "vendor/jacobsthal"
 
 [[require]]
 name = "baker_harman_small_remainders"
-path = "../baker-harman-small-remainders"
+git = "https://github.com/jasondavies/baker-harman-small-remainders"
+rev = "50d3a37e1350627349a640fbb9f6bf084f73bc60"
