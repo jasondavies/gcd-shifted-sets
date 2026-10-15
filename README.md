@@ -30,7 +30,31 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 Lemma 5 (`BakerHarman`) remains an explicit hypothesis of Theorem 1, rather than an axiom.
 It is stated in `Defs.lean` in a slightly weaker form: the vector must have positive
 entries, the constants are existentially quantified, and "sufficiently large `R`" becomes
-`R ≥ R₀`. Each change only weakens what is assumed.
+`R ≥ R₀`. Each change only weakens what is assumed relative to the shifted-sets paper's
+Lemma 5.
+
+There is an exponent discrepancy between that lemma and its cited theorem.
+[Baker–Harman, *Small remainder of a vector to suitable modulus*, Math. Z. 221 (1996), 59–71](https://doi.org/10.1007/BF02622099),
+p. 62, equation (2.1), gives `c(K) = 1 / (2^(k + 1) - 4)` with
+`k = ⌈1 + max{K,1}⌉`, and explicitly uses this constant in its Theorem 1.
+The shifted-sets paper's Lemma 5 (p. 67), and our `gammaBH`, instead use
+`γ(K) = 1 / (2^(2 + max{1,K}) - 4)`. For noninteger `K > 1`, this allows a larger
+range `Q ≤ R^γ(K)` than the original theorem supplies: at `K = 3/2`,
+`c(K) = 1/12 ≈ 0.0833`, whereas `γ(K) ≈ 0.1367`.
+Thus formalising the original theorem as stated would not discharge the current hypothesis.
+
+The original **proof**, however, has enough numerical slack to accommodate `γ(K)`.
+Before weakening its estimate to `R^(1-2c(K))`, the exponent pair in Lemma 1 gives
+saving `s(K) = (k - max{1,K}) / (2^k - 2)`.
+[`BakerHarmanExponent.lean`](ShiftedGcd/BakerHarmanExponent.lean) proves
+`s(K) ≥ 4γ(K)/3`. Choosing the small-sum cutoff `R Q^(-5/4)` in Proposition 3
+leaves a positive margin `s(K) - 5γ(K)/4 ≥ γ(K)/12`; the module also proves that
+any fixed multiple of `R^(1-s(K))` is eventually at most half this cutoff,
+uniformly for `0 < Q ≤ R^γ(K)`. This supplies the exponent bookkeeping needed to
+adapt the original proof without changing `γ`, `κ` or `ϑ`.
+The exponential-sum bound, Fourier detection lemma, lattice induction and final
+approximation argument remain to be formalised. **Theorem 1 is still conditional**
+on `BakerHarman`; the new module proves numerical inequalities, not that hypothesis.
 
 Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
 The proof uses the stronger quadratic Jacobsthal bound from

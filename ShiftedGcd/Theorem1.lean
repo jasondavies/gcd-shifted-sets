@@ -1,4 +1,4 @@
-import ShiftedGcd.Defs
+import ShiftedGcd.BakerHarmanExponent
 
 /-!
 # Theorem 1: large gcd after small shifts
@@ -25,32 +25,6 @@ satisfies `εκ(n,ε) > 1`, which is what makes `ϑ > 0`.
 open Finset
 
 namespace ShiftedGcd
-
-lemma gammaBH_denom_ge (K : ℝ) : 4 ≤ (2:ℝ) ^ (2 + max 1 K) - 4 := by
-  have : (2:ℝ) ^ (3:ℝ) ≤ (2:ℝ) ^ (2 + max 1 K) :=
-    Real.rpow_le_rpow_of_exponent_le (by norm_num) (by linarith [le_max_left 1 K])
-  have h8 : (2:ℝ) ^ (3:ℝ) = 8 := by norm_num
-  linarith
-
-lemma gammaBH_pos (K : ℝ) : 0 < gammaBH K := by
-  unfold gammaBH; have := gammaBH_denom_ge K; positivity
-
-lemma gammaBH_le (K : ℝ) : gammaBH K ≤ 1 / 4 := by
-  unfold gammaBH; exact one_div_le_one_div_of_le (by norm_num) (gammaBH_denom_ge K)
-
-lemma gammaBH_antitone : Antitone gammaBH := by
-  intro x y hxy
-  unfold gammaBH
-  apply one_div_le_one_div_of_le (by linarith [gammaBH_denom_ge x])
-  have := Real.rpow_le_rpow_of_exponent_le (x := 2) (by norm_num)
-    (show 2 + max 1 x ≤ 2 + max 1 y by linarith [max_le_max (le_refl (1:ℝ)) hxy])
-  linarith
-
-lemma gammaBH_continuous : Continuous gammaBH := by
-  unfold gammaBH
-  refine continuous_const.div ?_ (fun K => by have := gammaBH_denom_ge K; intro h; linarith)
-  exact (continuous_const.rpow (continuous_const.add (continuous_const.max continuous_id))
-    (fun _ => Or.inl (by norm_num))).sub continuous_const
 
 /-- Equation (2) has a unique positive solution. -/
 theorem kappa_existsUnique {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε < 1) :

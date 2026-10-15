@@ -29,7 +29,9 @@ noncomputable def distNearestInt (ξ : ℝ) : ℝ := |ξ - round ξ|
 
 /-! ### Theorem 1 -/
 
-/-- The Baker–Harman exponent `γ(K) = 1 / (2^{2 + max{1,K}} - 4)`. -/
+/-- The exponent `γ(K) = 1 / (2^{2 + max{1,K}} - 4)` quoted in the shifted-sets paper's
+Lemma 5. Baker–Harman's original equation (2.1) instead uses
+`1 / (2^{k + 1} - 4)`, where `k = ⌈1 + max{K,1}⌉`; see `BakerHarman`. -/
 noncomputable def gammaBH (K : ℝ) : ℝ := 1 / ((2 : ℝ) ^ (2 + max 1 K) - 4)
 
 /-- `κ` solves equation (2): `n(εκ - 1)/(n - 1) = γ(κ)`, `κ > 0`. -/
@@ -45,11 +47,19 @@ noncomputable def kappa (n : ℕ) (ε : ℝ) : ℝ :=
 /-- `ϑ(n, ε) = (1 - 1/(εκ(n,ε))) / (n - 1)`. -/
 noncomputable def theta (n : ℕ) (ε : ℝ) : ℝ := (1 - 1 / (ε * kappa n ε)) / ((n : ℝ) - 1)
 
-/-- **Lemma 5** (Baker–Harman, Math. Z. 221 (1996), Theorem 1), for dimension `n` and exponent
-`K`, in a slightly weaker form than quoted in the paper. This deep result is not proved here;
+/-- **Lemma 5** of the shifted-sets paper, attributed there to Baker–Harman,
+Math. Z. 221 (1996), Theorem 1, for dimension `n` and exponent `K`, in a slightly weaker
+form than quoted in the shifted-sets paper. This result is not proved here;
 it is taken as a hypothesis of Theorem 1. The constants are existentially quantified,
 "sufficiently large `Q` and `R`" is `C₁ ≤ Q`, `R₀ ≤ R`, and the vector is restricted to
-positive entries. These changes only weaken what is assumed. -/
+positive entries. These changes only weaken what is assumed relative to Lemma 5.
+
+The original Baker–Harman equation (2.1), p. 62, uses the integer
+`k = ⌈1 + max{K,1}⌉` and exponent `1 / (2^{k + 1} - 4)`. For noninteger `K > 1`,
+this is smaller than `gammaBH K`, so that theorem does not directly establish this
+hypothesis. `ShiftedGcd.BakerHarmanExponent` proves that retaining the saving in the
+original exponent-pair estimate leaves enough numerical margin for a modified cutoff
+in the proof. The analytic and lattice arguments remain to be formalised. -/
 def BakerHarman (n : ℕ) (K : ℝ) : Prop :=
   ∃ C₁ c₂ R₀ : ℝ, 0 < c₂ ∧
     ∀ (a : Fin n → ℕ), (∀ i, 0 < a i) → ∀ Q R : ℝ, R₀ ≤ R →
