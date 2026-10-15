@@ -49,18 +49,19 @@ noncomputable def theta (n : ℕ) (ε : ℝ) : ℝ := (1 - 1 / (ε * kappa n ε)
 
 /-- **Lemma 5** of the shifted-sets paper, attributed there to Baker–Harman,
 Math. Z. 221 (1996), Theorem 1, for dimension `n` and exponent `K`, in a slightly weaker
-form than quoted in the shifted-sets paper. This result is not proved here;
-it is taken as a hypothesis of Theorem 1. The constants are existentially quantified,
-"sufficiently large `Q` and `R`" is `C₁ ≤ Q`, `R₀ ≤ R`, and the vector is restricted to
-positive entries. These changes only weaken what is assumed relative to Lemma 5.
+form than quoted in the shifted-sets paper. This general unequal-weight statement is
+retained for reference; it is neither proved nor assumed by the main theorems.
+Theorem 1 instead uses the proved specialization `bakerHarman_equal_weights`.
+The constants are existentially quantified, "sufficiently large `Q` and `R`" is
+`C₁ ≤ Q`, `R₀ ≤ R`, and the vector is restricted to positive entries.
 
 The original Baker–Harman equation (2.1), p. 62, uses the integer
 `k = ⌈1 + max{K,1}⌉` and exponent `1 / (2^{k + 1} - 4)`. For noninteger `K > 1`,
 this is smaller than `gammaBH K`, so that theorem does not directly establish this
-hypothesis. `ShiftedGcd.BakerHarmanExponent` proves that retaining the saving in the
-original exponent-pair estimate leaves enough numerical margin for a modified cutoff
-in the proof. The analytic estimates and large-vector lattice induction are proved in
-`ShiftedGcd.BakerHarman`; the final simultaneous-approximation argument remains unfinished. -/
+statement. `ShiftedGcd.BakerHarmanExponent` proves that retaining the saving in the
+original exponent-pair estimate leaves enough numerical margin for a modified cutoff.
+The analytic estimates, lattice induction, and final equal-weight approximation are
+proved in `ShiftedGcd.BakerHarman`, preserving the power exponent used by Theorem 1. -/
 def BakerHarman (n : ℕ) (K : ℝ) : Prop :=
   ∃ C₁ c₂ R₀ : ℝ, 0 < c₂ ∧
     ∀ (a : Fin n → ℕ), (∀ i, 0 < a i) → ∀ Q R : ℝ, R₀ ≤ R →

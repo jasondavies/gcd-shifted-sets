@@ -1,9 +1,9 @@
-import ShiftedGcd.BakerHarmanExponent
+import ShiftedGcd.BakerHarman.EqualWeights
 
 /-!
 # Theorem 1: large gcd after small shifts
 
-Conditional on Lemma 5 (Baker–Harman), given as the hypothesis `BakerHarman n (kappa n ε)`.
+Unconditional, using the proved equal-weight Baker–Harman approximation theorem.
 
 The paper states: for `H ≥ 𝔥(a)^ε` there is `h` with `𝔥(h) ≤ H` and
 `gcd(a + h) ≫ 𝔥(h) H^ϑ`. Read literally this is trivial (take `h = 0`). The proof actually
@@ -118,8 +118,7 @@ lemma exists_shift (x : ℤ) (r : ℕ) (hr : 0 < r) (ψ : ℝ)
 
 open Filter Topology in
 /-- **Theorem 1** (strong form, as actually proved in the paper). -/
-theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε < 1)
-    (hBH : BakerHarman n (kappa n ε)) :
+theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε < 1) :
     ∃ c > 0, ∀ (a : Fin n → ℤ) (H : ℝ), 1 ≤ H → (height a : ℝ) ^ ε ≤ H →
       ∃ h : Fin n → ℤ, (height h : ℝ) ≤ H ∧ ∃ r : ℕ, (∀ i, (r : ℤ) ∣ a i + h i) ∧
         c * height h * H ^ theta n ε ≤ r ∧ c * H ^ (1 / (ε * kappa n ε)) ≤ r := by
@@ -128,12 +127,12 @@ theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε 
   have hεK := one_lt_eps_mul_kappa hn hε0 hε1
   have hθ0 := theta_pos hn hε0 hε1
   set K := kappa n ε with hKdef
-  obtain ⟨C₁, c₂, R₀, hc₂, hBH'⟩ := hBH
   have hn1 : (1:ℝ) < n := by exact_mod_cast hn
   have hn0 : (0:ℝ) < n := by linarith
   have hn10 : (n:ℝ) - 1 ≠ 0 := by linarith
   have hKpos : 0 < K := hK.1
   have hK1 : 1 ≤ K := by nlinarith
+  obtain ⟨C₁, R₀, _, _, happrox⟩ := bakerHarman_equal_weights n hn K hK1
   have hεK0 : ε * K ≠ 0 := by positivity
   set s := 1 / (ε * K) with hs
   have hs0 : 0 < s := by positivity
@@ -151,14 +150,11 @@ theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε 
     rw [hL]; apply div_nonneg (by linarith) (by linarith)
   have h1 : ((n:ℝ) - 1) * θ = 1 - s := by rw [hθdef]; field_simp
   have h2 : ((n:ℝ) - 1) * L = Real.log 2 + Real.log n := by rw [hL]; field_simp
-  -- threshold for the condition on `ψ`
-  have hlim := Real.tendsto_pow_mul_exp_neg_atTop_nhds_zero n
-  obtain ⟨W, hW⟩ := eventually_atTop.1
-    (hlim.eventually (gt_mem_nhds (show (0:ℝ) < c₂ / (n:ℝ) ^ n by positivity)))
-  set Wst := max (max W 1) (Real.log (max C₁ 1)) with hWst
+  -- Thresholds for the proved reciprocal approximation theorem.
+  set Wst := max 1 (Real.log (max C₁ 1)) with hWst
   set t₀ := max ((Wst + L) / θ) (Real.log (max R₀ 1) / s) with ht₀def
   have ht₀ : 0 ≤ t₀ := by
-    have : 1 ≤ Wst := le_trans (le_max_right _ _) (le_max_left _ _)
+    have : 1 ≤ Wst := le_max_left _ _
     exact le_trans (div_nonneg (by linarith) hθ0.le) (le_max_left _ _)
   refine ⟨Real.exp (-L - t₀ * s), Real.exp_pos _, ?_⟩
   intro a H hH1 hHa
@@ -179,8 +175,7 @@ theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε 
   have hwW : Wst ≤ w := by
     have : (Wst + L) / θ ≤ t := le_trans (le_max_left _ _) ht
     rw [div_le_iff₀ hθ0] at this; rw [hw]; linarith
-  have hw1 : 1 ≤ w := le_trans (le_trans (le_max_right _ _) (le_max_left _ _)) hwW
-  have hwW' : W ≤ w := le_trans (le_trans (le_max_left _ _) (le_max_left _ _)) hwW
+  have hw1 : 1 ≤ w := (le_max_left _ _).trans hwW
   have hwC : Real.log (max C₁ 1) ≤ w := le_trans (le_max_right _ _) hwW
   have hst : Real.log (max R₀ 1) ≤ s * t := by
     have : Real.log (max R₀ 1) / s ≤ t := le_trans (le_max_right _ _) ht
@@ -189,10 +184,6 @@ theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε 
   set v := Real.log n + s * t with hv
   have hu0 : 0 < u := by positivity
   set a' : Fin n → ℕ := fun i => if a i = 0 then 1 else (a i).natAbs with ha'
-  have ha'pos : ∀ i, 0 < a' i := by
-    intro i; simp only [ha']; split_ifs with h
-    · norm_num
-    · exact Int.natAbs_pos.2 h
   have hha : (height a : ℝ) ≤ Real.exp (t * ε⁻¹) := by
     have e : (height a : ℝ) = ((height a : ℝ) ^ ε) ^ ε⁻¹ :=
       (Real.rpow_rpow_inv (Nat.cast_nonneg _) hε0.ne').symm
@@ -240,21 +231,13 @@ theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε 
     have e2 : v * γ = γ * Real.log n + γ * s * t := by rw [hv]; ring
     rw [e1, e2]
     linarith [mul_nonneg hγ0.le hlogn, mul_nonneg hn0.le hL0]
-  have hψ : ∀ i : Fin n, (fun _ => Real.exp (-w)) i ≤ c₂ * (Real.log (Real.exp u))⁻¹ ^ n := by
-    intro i
-    simp only
-    rw [Real.log_exp, inv_pow, ← div_eq_mul_inv, le_div_iff₀ (by positivity)]
-    have hWw := hW w hwW'
-    have := (lt_div_iff₀ (by positivity)).1 hWw
-    rw [hu, mul_pow]
-    have e : Real.exp (-w) * ((n:ℝ) ^ n * w ^ n) = w ^ n * Real.exp (-w) * (n:ℝ) ^ n := by ring
-    linarith
-  have hprod : ∏ _i : Fin n, Real.exp (-w) = (Real.exp u)⁻¹ := by
-    rw [Finset.prod_const, Finset.card_univ, Fintype.card_fin, ← Real.exp_nat_mul,
-      ← Real.exp_neg, hu]
-    congr 1; ring
-  obtain ⟨r, hRr, hr2, hdist⟩ := hBH' a' ha'pos (Real.exp u) (Real.exp v) hR₀ hsqrt hC₁ hQR
-    (fun _ => Real.exp (-w)) (fun _ => Real.exp_pos _) hψ hprod
+  have hweight : equalWeight n (Real.exp u) = Real.exp (-w) := by
+    rw [equalWeight, ← Real.exp_mul, hu]
+    congr 1
+    field_simp
+  obtain ⟨r, hRr, hr2, hdist⟩ := happrox (Real.exp u) (Real.exp v) hC₁ hR₀ hQR
+    (fun i => (a' i : ℝ)) (fun i => Nat.cast_nonneg _) hsqrt
+  rw [hweight] at hdist
   have hrpos : 0 < r := by
     have : 0 < (r:ℝ) := lt_of_lt_of_le (Real.exp_pos _) hRr
     exact_mod_cast this
@@ -295,13 +278,12 @@ theorem theorem1 {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε 
 
 /-- **Theorem 1** (gcd form): for `𝔥(a)^ε ≤ H < 𝔥(a)` there is a shift `h` with `𝔥(h) ≤ H` and
 `gcd(a + h) ≫ 𝔥(h) H^ϑ`, and moreover `gcd(a + h) ≫ H^{1/(εκ)}`. -/
-theorem theorem1_gcd {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε < 1)
-    (hBH : BakerHarman n (kappa n ε)) :
+theorem theorem1_gcd {n : ℕ} (hn : 2 ≤ n) {ε : ℝ} (hε0 : 0 < ε) (hε1 : ε < 1) :
     ∃ c > 0, ∀ (a : Fin n → ℤ) (H : ℝ), 1 ≤ H → (height a : ℝ) ^ ε ≤ H → H < height a →
       ∃ h : Fin n → ℤ, (height h : ℝ) ≤ H ∧
         c * height h * H ^ theta n ε ≤ vgcd (a + h) ∧
         c * H ^ (1 / (ε * kappa n ε)) ≤ vgcd (a + h) := by
-  obtain ⟨c, hc, hmain⟩ := theorem1 hn hε0 hε1 hBH
+  obtain ⟨c, hc, hmain⟩ := theorem1 hn hε0 hε1
   refine ⟨c, hc, fun a H hH1 hHa hHlt => ?_⟩
   obtain ⟨h, hhH, r, hdvd, hr1, hr2⟩ := hmain a H hH1 hHa
   have hne : ∃ i, a i + h i ≠ 0 := by

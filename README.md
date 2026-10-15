@@ -19,7 +19,7 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 |---|---|---|
 | Definitions (`𝔥`, `gcd`, `L`, `ℓ`, `R`, `κ`, `ϑ`) | `ShiftedGcd/Defs.lean` (`t(a)` is `tShift` in `UniformShift.lean`) | |
 | Claims about `κ(n,ε)` (existence, uniqueness, `ϑ > 0`) | `kappa_existsUnique`, `theta_pos` | proved |
-| Theorem 1 | `theorem1`, `theorem1_gcd` | proved, assuming Lemma 5 (Baker–Harman) as hypothesis `BakerHarman` |
+| Theorem 1 | `theorem1`, `theorem1_gcd` | proved unconditionally, with the original exponents |
 | Lemma 6 (Iwaniec) | `iwaniecBound` | proved from the vendored quadratic Jacobsthal bound |
 | Theorem 2 | `theorem2`, `theorem2_L` | proved unconditionally |
 | Theorem 3 | `theorem3`, `theorem3_ell` | proved unconditionally |
@@ -27,11 +27,15 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 | Thesis Theorem 3.2.1: `t(a) ≪ log² 𝔥(a)` (uniform shift) | `uniformShift_exists`, `tShift_le` | proved unconditionally |
 | Abstract: gcd "much larger than `H`" | `abstract_claim_false`, `not_gcd_much_larger` | **disproved** (`AbstractClaim.lean`) |
 
-Lemma 5 (`BakerHarman`) remains an explicit hypothesis of Theorem 1, rather than an axiom.
-It is stated in `Defs.lean` in a slightly weaker form: the vector must have positive
-entries, the constants are existentially quantified, and "sufficiently large `R`" becomes
-`R ≥ R₀`. Each change only weakens what is assumed relative to the shifted-sets paper's
-Lemma 5.
+Theorem 1 uses the proved equal-weight reciprocal approximation in
+[`BakerHarman/EqualWeights.lean`](ShiftedGcd/BakerHarman/EqualWeights.lean).
+For `n ≥ 2`, `K ≥ 1`, sufficiently large `Q,R`, `Q ≤ R^γ(K)`, and a nonnegative
+vector of Euclidean norm at most `R^K`, it supplies an integer modulus
+`R ≤ r ≤ 2QR` with every coordinate's nearest-integer error at most `Q^(-1/n)`.
+This is the specialization needed by Theorem 1, whose conclusions and exponents
+`γ`, `κ`, and `ϑ` are unchanged. The more general unequal-weight predicate
+`BakerHarman` is retained in `Defs.lean` as a reference statement; it is not proved
+or assumed by any theorem here.
 
 There is an exponent discrepancy between that lemma and its cited theorem.
 [Baker–Harman, *Small remainder of a vector to suitable modulus*, Math. Z. 221 (1996), 59–71](https://doi.org/10.1007/BF02622099),
@@ -41,7 +45,7 @@ The shifted-sets paper's Lemma 5 (p. 67), and our `gammaBH`, instead use
 `γ(K) = 1 / (2^(2 + max{1,K}) - 4)`. For noninteger `K > 1`, this allows a larger
 range `Q ≤ R^γ(K)` than the original theorem supplies: at `K = 3/2`,
 `c(K) = 1/12 ≈ 0.0833`, whereas `γ(K) ≈ 0.1367`.
-Thus formalising the original theorem as stated would not discharge the current hypothesis.
+Thus the original theorem as stated does not supply the power range used here.
 
 The original **proof**, however, has enough numerical slack to accommodate `γ(K)`.
 Before weakening its estimate to `R^(1-2c(K))`, the exponent pair in Lemma 1 gives
@@ -52,8 +56,8 @@ leaves a positive margin `s(K) - 5γ(K)/4 ≥ γ(K)/12`; the module also proves 
 any fixed multiple of `R^(1-s(K))` is eventually at most half this cutoff,
 uniformly for `0 < Q ≤ R^γ(K)`. This supplies the exponent bookkeeping needed to
 adapt the original proof without changing `γ`, `κ` or `ϑ`.
-The lattice induction and final approximation argument remain to be formalised.
-**Theorem 1 is still conditional** on `BakerHarman`.
+The completed proof below retains that power range through the analytic estimates,
+lattice induction, and final equal-weight approximation.
 
 The analytic proof starts in
 [`BakerHarman/ReciprocalSum.lean`](ShiftedGcd/BakerHarman/ReciprocalSum.lean).
@@ -112,8 +116,13 @@ proves the large-vector approximation in every positive dimension, with constant
 and a logarithmic degree depending only on the dimension and `K`. The induction
 preserves `Q ≤ R^γ(K)` exactly; its output interval is bounded by
 `B R Q (log Q + 1)^m / ρ`, where `ρ ≥ 1` is a lower bound for nonzero lattice lengths.
-The final simultaneous approximation argument, including its small-vector case,
-remains unfinished; Theorem 1 is still conditional and its exponents have not changed.
+[`BakerHarman/SimultaneousDirichlet.lean`](ShiftedGcd/BakerHarman/SimultaneousDirichlet.lean)
+proves simultaneous approximation by a finite pigeonhole argument.
+[`BakerHarman/SmallVectorEqualWeights.lean`](ShiftedGcd/BakerHarman/SmallVectorEqualWeights.lean)
+uses it and reciprocal rounding to cover small vectors. Finally, `EqualWeights.lean`
+combines both cases: equal coordinate tolerances absorb the fixed logarithmic powers,
+and both cases produce a modulus in `[R,2QR]`. This removes the analytic hypothesis
+from both `theorem1` and `theorem1_gcd`.
 
 Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
 The proof uses the stronger quadratic Jacobsthal bound from
