@@ -98,9 +98,16 @@ the upstream Apache-2.0 license retained. They avoid its unrelated import branch
 [`BakerHarman/LogFactors.lean`](ShiftedGcd/BakerHarman/LogFactors.lean) absorbs fixed
 logarithmic powers in the numerator range, retaining saving `23γ(K)/20`.
 The small-sum removal lemma also accommodates logarithmic factors in the frequency
-count. Connecting these estimates through the dimension induction and final
-simultaneous approximation remains unfinished; the original theorem's exponents
-have not been changed.
+count. [`BakerHarman/SmallDualVector.lean`](ShiftedGcd/BakerHarman/SmallDualVector.lean)
+combines these estimates: failure of reciprocal approximation produces a nonzero
+dual vector of length `O(log Q + 1)` with scalar product `O(R(log Q + 1))`.
+The constants are uniform over ambient spaces and lattices of a fixed dimension.
+[`BakerHarman/DimensionOne.lean`](ShiftedGcd/BakerHarman/DimensionOne.lean)
+proves the one-dimensional large-vector approximation case. The lattice modules
+also prove primitive-normal reduction, the exact hyperplane covolume formula,
+dual norm and covolume lower bounds, scaling, and lifting approximations from a
+scaled hyperplane lattice. The higher-dimensional induction and final simultaneous
+approximation remain unfinished; the original theorem's exponents have not changed.
 
 Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
 The proof uses the stronger quadratic Jacobsthal bound from
