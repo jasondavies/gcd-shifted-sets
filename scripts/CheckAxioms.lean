@@ -10,7 +10,8 @@ run_cmd do
   let names := env.constants.fold
       (init := #[``OAI.Erdos970.Erdos970Final.erdos_970_quadratic]) fun names name _ =>
     let publicName := privateToUserName name
-    if (`ShiftedGcd).isPrefixOf publicName || (`OAI.Problem337).isPrefixOf publicName then
+    if (`ShiftedGcd).isPrefixOf publicName || (`OAI.Problem337).isPrefixOf publicName ||
+        (`OAI.Erdos3).isPrefixOf publicName then
       names.push name
     else names
   let allowed : Array Name := #[``propext, ``Classical.choice, ``Quot.sound]

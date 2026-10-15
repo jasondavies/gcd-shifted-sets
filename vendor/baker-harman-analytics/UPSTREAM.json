@@ -5,7 +5,8 @@
   "entrypoints": [
     "BakerHarmanAnalytics.SecondDerivativeTest",
     "BakerHarmanAnalytics.CorrelationPhase",
-    "BakerHarmanAnalytics.ReciprocalPhaseRegularity"
+    "BakerHarmanAnalytics.ReciprocalPhaseRegularity",
+    "BakerHarmanAnalytics.LatticeHyperplaneBasis"
   ],
   "upstream_lean": "4.34.1",
   "local_lean": "4.34.0",
@@ -24,7 +25,8 @@
     "BakerHarmanAnalytics/SecondDerivativeTest.lean": "1e11d35eeabfffd5febe4672735a5748e0359b2d260c212c8a1f6191589c8283",
     "BakerHarmanAnalytics/SecondDifference.lean": "d8f5296158a4c7b3605d02e1c518fc744b13354b9a7b8ac47d734c9502bc9f28",
     "BakerHarmanAnalytics/SeparatedIntervalCount.lean": "30b551b91f80c796c876812275fa8707d0de6a06f11ffd1efca13702f2919b8d",
-    "BakerHarmanAnalytics/VanDerCorput.lean": "c936eed4dfea21250204c1fea556d97c7143e4acc904c8227108b2b6a00f527d"
+    "BakerHarmanAnalytics/VanDerCorput.lean": "c936eed4dfea21250204c1fea556d97c7143e4acc904c8227108b2b6a00f527d",
+    "BakerHarmanAnalytics/LatticeHyperplaneBasis.lean": "6cd45054127392ee3a19433983f90fb42d675c07f10caec30ee1f7ec62140f94"
   },
   "upstream_files": {
     "BakerHarmanAnalytics/CorrelationPhase.lean": {
@@ -86,6 +88,10 @@
     "BakerHarmanAnalytics/VanDerCorput.lean": {
       "path": "lean/OAI/NumberTheory/EgyptianFractions/VanDerCorput.lean",
       "sha256": "bb5de8d2bab045e97bdd93e93bca726598780f73be857d332e0090b0361eaca4"
+    },
+    "BakerHarmanAnalytics/LatticeHyperplaneBasis.lean": {
+      "path": "lean/OAI/Combinatorics/Progressions/Lattices/LatticeHyperplaneBasis.lean",
+      "sha256": "6cd45054127392ee3a19433983f90fb42d675c07f10caec30ee1f7ec62140f94"
     }
   },
   "import_rewrite": {

@@ -52,8 +52,8 @@ leaves a positive margin `s(K) - 5γ(K)/4 ≥ γ(K)/12`; the module also proves 
 any fixed multiple of `R^(1-s(K))` is eventually at most half this cutoff,
 uniformly for `0 < Q ≤ R^γ(K)`. This supplies the exponent bookkeeping needed to
 adapt the original proof without changing `γ`, `κ` or `ϑ`.
-The Fourier detection lemma, lattice induction and final approximation argument
-remain to be formalised. **Theorem 1 is still conditional** on `BakerHarman`.
+The lattice induction and final approximation argument remain to be formalised.
+**Theorem 1 is still conditional** on `BakerHarman`.
 
 The analytic proof starts in
 [`BakerHarman/ReciprocalSum.lean`](ShiftedGcd/BakerHarman/ReciprocalSum.lean).
@@ -73,17 +73,34 @@ for sufficiently large `R`. [`BakerHarman/LargeSums.lean`](ShiftedGcd/BakerHarma
 then proves that a sum of size at least `T ≥ R Q^(-11/10)` has
 `|z| ≤ C R²/T`, uniformly for `0 < Q ≤ R^γ(K)`. This completes the analytic
 input to the lattice argument, using a different saving and cutoff from the
-original exponent-pair bookkeeping above. The Fourier/lattice arguments remain unfinished.
+original exponent-pair bookkeeping above.
 [`BakerHarman/DyadicSelection.lean`](ShiftedGcd/BakerHarman/DyadicSelection.lean)
 proves the finite counting steps: discarding small sums, selecting a dyadic class,
 bounding the number of classes logarithmically, and finding a small scalar product
 or a small difference by the box argument, including singleton classes.
-The derivative and differencing estimates use fifteen Apache-2.0 sources from the
+The derivative, differencing and basic lattice definitions use sixteen Apache-2.0 sources from the
 same pinned `openai/math` revision, in `vendor/baker-harman-analytics`.
 Only their import paths are relocated to avoid overlapping Lake module roots;
 `python3 scripts/check_baker_harman_sources.py` verifies local and upstream hashes,
 the import-only relocation, and the exact dependency closure. The axiom audit below
-also checks every imported declaration in their `OAI.Problem337` namespace.
+also checks every imported declaration in their `OAI.Problem337` and `OAI.Erdos3` namespaces.
+
+[`BakerHarman/Lattice/DetectionBudget.lean`](ShiftedGcd/BakerHarman/Lattice/DetectionBudget.lean)
+proves a Gaussian alternative to the original Fourier detection lemma. For any
+dimension `d`, its threshold is uniform over ambient inner product spaces and
+lattices with minimum nonzero length at least one and covolume at most `Q`.
+A finite sequence avoiding the unit neighborhoods has Fourier-sum mass at least
+one quarter of its length among nonzero dual vectors of length `O_d(log Q + 1)`;
+there are at most `O_d(Q(log Q + 1)^d)` such vectors.
+The local `Lattice` modules extract and adapt the required Poisson and integration
+proofs from the same pinned `openai/math` revision, with source attribution and
+the upstream Apache-2.0 license retained. They avoid its unrelated import branches.
+[`BakerHarman/LogFactors.lean`](ShiftedGcd/BakerHarman/LogFactors.lean) absorbs fixed
+logarithmic powers in the numerator range, retaining saving `23γ(K)/20`.
+The small-sum removal lemma also accommodates logarithmic factors in the frequency
+count. Connecting these estimates through the dimension induction and final
+simultaneous approximation remains unfinished; the original theorem's exponents
+have not been changed.
 
 Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
 The proof uses the stronger quadratic Jacobsthal bound from

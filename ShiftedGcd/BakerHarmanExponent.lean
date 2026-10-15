@@ -32,8 +32,9 @@ reciprocal term `R²/|z|` to control large sums as in the original argument.
 
 This supplies the numerical margin for adapting the proof. The separate
 `BakerHarman.ExponentialSum` module proves the analytic bound using saving
-`6 * gammaBH K / 5`. The Fourier detection lemma, lattice induction and final
-approximation step remain before the hypothesis `BakerHarman` can be discharged.
+`6 * gammaBH K / 5`. A Gaussian alternative to Fourier detection is proved in
+`BakerHarman.Lattice.DetectionBudget`; lattice induction and the final approximation
+step remain before Theorem 1 can become unconditional.
 -/
 
 namespace ShiftedGcd

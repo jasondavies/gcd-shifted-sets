@@ -228,23 +228,22 @@ theorem exists_dyadic_length (Q : ℝ) (hQ : 1 ≤ Q) :
     rw [he] at hmhi
     nlinarith
 
-/-- When there are at most `DQ` frequencies, discarding sums below
+/-- When there are at most `DQ(log Q+1)^n` frequencies, discarding sums below
 `RQ^(-11/10)` preserves half of any lower bound `cR`, once `Q` is large.
 The threshold is uniform in the finite family and in `R`. -/
-theorem large_terms_retain_mass (D c : ℝ) (hc : 0 < c) :
+theorem large_terms_retain_mass_log_factor (D c : ℝ) (n : ℕ) (hc : 0 < c) :
     ∀ᶠ Q : ℝ in Filter.atTop, ∀ (ι : Type*) (s : Finset ι) (w : ι → ℝ) (R : ℝ),
-      0 ≤ R → (s.card : ℝ) ≤ D * Q → c * R ≤ ∑ i ∈ s, w i →
+      0 ≤ R → (s.card : ℝ) ≤ D * (Real.log Q + 1) ^ n * Q → c * R ≤ ∑ i ∈ s, w i →
       c * R / 2 ≤ ∑ i ∈ s with R * Q ^ (-(11 / 10 : ℝ)) ≤ w i, w i := by
-  have hgrow : ∀ᶠ Q : ℝ in Filter.atTop, 2 * D / c ≤ Q ^ (1 / 10 : ℝ) :=
-    (tendsto_rpow_atTop (by norm_num : (0 : ℝ) < 1 / 10)).eventually
-      (Filter.eventually_ge_atTop (2 * D / c))
+  have hgrow := log_add_one_pow_absorbed (2 * D / c) (1 / 10 : ℝ) n (by norm_num)
   filter_upwards [hgrow, Filter.eventually_ge_atTop (1 : ℝ)] with Q hgrow hQ
   intro ι s w R hR hcard hmass
   have hQ0 : 0 < Q := by linarith
   have hpow : 0 < Q ^ (1 / 10 : ℝ) := Real.rpow_pos_of_pos hQ0 _
-  have hscale : D * Q ^ (-(1 / 10 : ℝ)) ≤ c / 2 := by
+  have hscale : (D * (Real.log Q + 1) ^ n) * Q ^ (-(1 / 10 : ℝ)) ≤ c / 2 := by
     rw [Real.rpow_neg hQ0.le, ← div_eq_mul_inv]
     apply (div_le_iff₀ hpow).mpr
+    rw [div_mul_eq_mul_div] at hgrow
     have := (div_le_iff₀ hc).mp hgrow
     nlinarith
   have hid : Q * Q ^ (-(11 / 10 : ℝ)) = Q ^ (-(1 / 10 : ℝ)) := by
@@ -253,12 +252,19 @@ theorem large_terms_retain_mass (D c : ℝ) (hc : 0 < c) :
     norm_num
   have hsmall : (s.card : ℝ) * (R * Q ^ (-(11 / 10 : ℝ))) ≤ c * R / 2 := by
     calc
-      _ ≤ (D * Q) * (R * Q ^ (-(11 / 10 : ℝ))) :=
+      _ ≤ (D * (Real.log Q + 1) ^ n * Q) * (R * Q ^ (-(11 / 10 : ℝ))) :=
         mul_le_mul_of_nonneg_right hcard (by positivity)
-      _ = R * (D * Q ^ (-(1 / 10 : ℝ))) := by rw [← hid]; ring
+      _ = R * ((D * (Real.log Q + 1) ^ n) * Q ^ (-(1 / 10 : ℝ))) := by rw [← hid]; ring
       _ ≤ R * (c / 2) := mul_le_mul_of_nonneg_left hscale hR
       _ = _ := by ring
   have h := sum_large_terms_ge s w (R * Q ^ (-(11 / 10 : ℝ))) (by positivity)
   linarith
+
+/-- Fixed-factor frequency-count version of the small-sum removal lemma. -/
+theorem large_terms_retain_mass (D c : ℝ) (hc : 0 < c) :
+    ∀ᶠ Q : ℝ in Filter.atTop, ∀ (ι : Type*) (s : Finset ι) (w : ι → ℝ) (R : ℝ),
+      0 ≤ R → (s.card : ℝ) ≤ D * Q → c * R ≤ ∑ i ∈ s, w i →
+      c * R / 2 ≤ ∑ i ∈ s with R * Q ^ (-(11 / 10 : ℝ)) ≤ w i, w i := by
+  simpa only [pow_zero, mul_one] using large_terms_retain_mass_log_factor D c 0 hc
 
 end ShiftedGcd

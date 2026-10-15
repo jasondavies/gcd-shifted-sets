@@ -1,4 +1,4 @@
-import ShiftedGcd.BakerHarman.ExponentialSum
+import ShiftedGcd.BakerHarman.LogFactors
 
 /-!
 # Frequencies with large reciprocal sums
@@ -44,17 +44,18 @@ theorem bakerHarman_analytic_power_absorbed (K C : ℝ) :
   nlinarith
 
 /-- A sum of size at least `T`, above the small-sum cutoff, has numerator
-at most a constant times `R²/T`. The bound includes the zero numerator. -/
-theorem bakerHarman_large_sum_frequency (K : ℝ) (hK : 1 ≤ K) :
-    ∃ C : ℝ, 0 < C ∧ ∀ B : ℝ,
+at most a constant times `R²/T`. Fixed logarithmic factors are permitted in
+the numerator range. The bound includes the zero numerator. -/
+theorem bakerHarman_large_sum_frequency_log_factor (K : ℝ) (hK : 1 ≤ K) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℝ) (n : ℕ),
       ∀ᶠ R : ℝ in Filter.atTop, ∀ (Q Z T : ℝ) (L U : ℤ),
-        0 < Q → Q ≤ R ^ gammaBH K → |Z| ≤ B * R ^ (K + 1) →
+        0 < Q → Q ≤ R ^ gammaBH K → |Z| ≤ B * (Real.log R + 1) ^ n * R ^ (K + 1) →
         R ≤ L → (U : ℝ) ≤ 2 * R → R * Q ^ (-(11 / 10 : ℝ)) ≤ T →
         T ≤ ‖∑ n ∈ Finset.Icc L U, differencingPhase (Z / n)‖ →
         |Z| ≤ C * R ^ 2 / T := by
-  obtain ⟨C, hC, hbound⟩ := bakerHarman_reciprocal_sum_fixed_factor K hK
-  refine ⟨2 * C, by positivity, fun B => ?_⟩
-  filter_upwards [hbound B, bakerHarman_analytic_power_absorbed K C,
+  obtain ⟨C, hC, hbound⟩ := bakerHarman_reciprocal_sum_log_factor K hK
+  refine ⟨2 * C, by positivity, fun B n => ?_⟩
+  filter_upwards [hbound B n, bakerHarman_analytic_power_absorbed K C,
     Filter.eventually_ge_atTop (1 : ℝ)] with R hbound habsorb hR
   intro Q Z T L U hQ hQR hZupper hL hU hcut hlarge
   have hR0 : 0 < R := by linarith
@@ -69,5 +70,16 @@ theorem bakerHarman_large_sum_frequency (K : ℝ) (hK : 1 ≤ K) :
     nlinarith
   have hm := (le_div_iff₀ (abs_pos.mpr hZ)).mp hrecip
   exact (le_div_iff₀ hT).mpr (by nlinarith only [hm])
+
+/-- Fixed-factor version of the large-sum frequency bound. -/
+theorem bakerHarman_large_sum_frequency (K : ℝ) (hK : 1 ≤ K) :
+    ∃ C : ℝ, 0 < C ∧ ∀ B : ℝ,
+      ∀ᶠ R : ℝ in Filter.atTop, ∀ (Q Z T : ℝ) (L U : ℤ),
+        0 < Q → Q ≤ R ^ gammaBH K → |Z| ≤ B * R ^ (K + 1) →
+        R ≤ L → (U : ℝ) ≤ 2 * R → R * Q ^ (-(11 / 10 : ℝ)) ≤ T →
+        T ≤ ‖∑ n ∈ Finset.Icc L U, differencingPhase (Z / n)‖ →
+        |Z| ≤ C * R ^ 2 / T := by
+  obtain ⟨C, hC, hbound⟩ := bakerHarman_large_sum_frequency_log_factor K hK
+  exact ⟨C, hC, fun B => by simpa only [pow_zero, mul_one] using hbound B 0⟩
 
 end ShiftedGcd
