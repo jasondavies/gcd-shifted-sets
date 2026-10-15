@@ -1,10 +1,10 @@
-import ShiftedGcd.Defs
+import ShiftedGcd.Iwaniec
 
 /-!
 # Theorem 2: small shifts making a vector pairwise coprime
 
-Conditional on Lemma 6 (Iwaniec's bound for the Jacobsthal function), given as the hypothesis
-`IwaniecBound`.
+Uses Lemma 6 (Iwaniec's bound for the Jacobsthal function), proved as `iwaniecBound`
+from the vendored quadratic Jacobsthal bound.
 
 The bound `L(a) ≪ log² 𝔥(a)` needs `𝔥(a) ≥ 2`: for `a = 0 ∈ ℤ²` we have `L(a) = 1`. The implied
 constant depends on `n`.
@@ -286,11 +286,11 @@ end Thm2
 open Thm2
 
 /-- **Theorem 2** (existence form). -/
-theorem theorem2 (hI : IwaniecBound) (n : ℕ) :
+theorem theorem2 (n : ℕ) :
     ∃ C : ℝ, ∀ a : Fin n → ℤ, 2 ≤ height a →
       ∃ h : Fin n → ℤ, PairwiseCoprimeVec (a + h) ∧
         (height h : ℝ) ≤ C * Real.log (height a) ^ 2 := by
-  obtain ⟨C0, hC0⟩ := hI
+  obtain ⟨C0, hC0⟩ := iwaniecBound
   set C := max C0 0 with hCdef
   have hC0' : 0 ≤ C := le_max_right _ _
   have hC : ∀ S : Finset ℕ, (∀ p ∈ S, p.Prime) → 2 ≤ S.card →
@@ -342,9 +342,9 @@ theorem theorem2 (hI : IwaniecBound) (n : ℕ) :
   nlinarith
 
 /-- **Theorem 2**: `L(a) ≪ log² 𝔥(a)`. -/
-theorem theorem2_L (hI : IwaniecBound) (n : ℕ) :
+theorem theorem2_L (n : ℕ) :
     ∃ C : ℝ, ∀ a : Fin n → ℤ, 2 ≤ height a → (L a : ℝ) ≤ C * Real.log (height a) ^ 2 := by
-  obtain ⟨C, hC⟩ := theorem2 hI n
+  obtain ⟨C, hC⟩ := theorem2 n
   refine ⟨C, fun a ha => ?_⟩
   obtain ⟨h, hcop, hb⟩ := hC a ha
   have : L a ≤ height h := Nat.sInf_le ⟨h, rfl, hcop⟩

@@ -12,7 +12,7 @@ All entries are shifted by the same `j ≥ 0`. When such a shift exists, `t(a)` 
 Theorem 3.2.1: if `a` has two distinct entries then a successful shift exists and
 `t(a) ≪ log² 𝔥(a)`.
 
-As for Theorem 2 this is conditional on Iwaniec's bound (`IwaniecBound`). The proof uses
+As for Theorem 2, the proof uses the established bound `iwaniecBound`, together with
 `gcd(a + j) ∣ gcd(aₛ + j, aᵣ - aₛ)` and the Jacobsthal bound for `aᵣ - aₛ`. The thesis bounds
 `ω(aᵣ - aₛ) log ω(aᵣ - aₛ)` by `ω(𝔥(a)) log ω(𝔥(a))`, which does not follow since `ω` is not
 monotone. We instead use `ω(m) log ω(m) ≪ log m` with `m = |aᵣ - aₛ| ≤ 2𝔥(a)`.
@@ -27,8 +27,7 @@ variable {n : ℕ}
 /-- `t(a)`: the least `j ≥ 0` with `gcd(a₁ + j, …, aₙ + j) = 1`, when such a shift exists.
 If no successful shift exists, this returns `0` by the convention `sInf ∅ = 0` in `ℕ`.
 For example, `a = (2, 2)` has no successful nonnegative shift but has `tShift a = 0`.
-For vectors with two distinct entries, `uniformShift_exists` supplies a successful shift
-under the hypothesis `IwaniecBound`. -/
+For vectors with two distinct entries, `uniformShift_exists` supplies a successful shift. -/
 noncomputable def tShift (a : Fin n → ℤ) : ℕ := sInf {j : ℕ | vgcd (fun i => a i + j) = 1}
 
 /-- If some entry is `±1` then `gcd(a) = 1`. -/
@@ -37,10 +36,10 @@ private lemma vgcd_eq_one_of_unit (x : Fin n → ℤ) (i : Fin n) (hi : (x i).na
   Nat.eq_one_of_dvd_one (hi ▸ Finset.gcd_dvd (mem_univ i))
 
 /-- **Thesis, Theorem 3.2.1** (existence form). -/
-theorem uniformShift_exists (hI : IwaniecBound) (n : ℕ) :
+theorem uniformShift_exists (n : ℕ) :
     ∃ C : ℝ, ∀ a : Fin n → ℤ, (∃ r s, a r ≠ a s) →
       ∃ j : ℕ, vgcd (fun i => a i + j) = 1 ∧ (j : ℝ) ≤ C * Real.log (height a) ^ 2 := by
-  obtain ⟨C0, hC0⟩ := hI
+  obtain ⟨C0, hC0⟩ := iwaniecBound
   set C := max C0 0 with hCdef
   have hC0' : 0 ≤ C := le_max_right _ _
   have hC : ∀ S : Finset ℕ, (∀ p ∈ S, p.Prime) → 2 ≤ S.card →
@@ -90,10 +89,10 @@ theorem uniformShift_exists (hI : IwaniecBound) (n : ℕ) :
       _ = (36 * C + 5) * Real.log x ^ 2 := by ring
 
 /-- **Thesis, Theorem 3.2.1**: if `a` has two distinct entries then `t(a) ≪ log² 𝔥(a)`. -/
-theorem tShift_le (hI : IwaniecBound) (n : ℕ) :
+theorem tShift_le (n : ℕ) :
     ∃ C : ℝ, ∀ a : Fin n → ℤ, (∃ r s, a r ≠ a s) →
       (tShift a : ℝ) ≤ C * Real.log (height a) ^ 2 := by
-  obtain ⟨C, hC⟩ := uniformShift_exists hI n
+  obtain ⟨C, hC⟩ := uniformShift_exists n
   refine ⟨C, fun a ha => ?_⟩
   obtain ⟨j, hj, hb⟩ := hC a ha
   have : tShift a ≤ j := Nat.sInf_le (show j ∈ {j : ℕ | vgcd (fun i => a i + j) = 1} from hj)

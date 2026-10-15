@@ -20,17 +20,27 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 | Definitions (`𝔥`, `gcd`, `L`, `ℓ`, `R`, `κ`, `ϑ`) | `ShiftedGcd/Defs.lean` (`t(a)` is `tShift` in `UniformShift.lean`) | |
 | Claims about `κ(n,ε)` (existence, uniqueness, `ϑ > 0`) | `kappa_existsUnique`, `theta_pos` | proved |
 | Theorem 1 | `theorem1`, `theorem1_gcd` | proved, assuming Lemma 5 (Baker–Harman) as hypothesis `BakerHarman` |
-| Theorem 2 | `theorem2`, `theorem2_L` | proved, assuming Lemma 6 (Iwaniec) as hypothesis `IwaniecBound` |
+| Lemma 6 (Iwaniec) | `iwaniecBound` | proved from the vendored quadratic Jacobsthal bound |
+| Theorem 2 | `theorem2`, `theorem2_L` | proved unconditionally |
 | Theorem 3 | `theorem3`, `theorem3_ell` | proved unconditionally |
 | Theorem 4 | `theorem4` | proved unconditionally (with the divisor bound in `DivisorBound.lean`) |
-| Thesis Theorem 3.2.1: `t(a) ≪ log² 𝔥(a)` (uniform shift) | `uniformShift_exists`, `tShift_le` | proved, assuming Lemma 6 (Iwaniec) as hypothesis `IwaniecBound` |
+| Thesis Theorem 3.2.1: `t(a) ≪ log² 𝔥(a)` (uniform shift) | `uniformShift_exists`, `tShift_le` | proved unconditionally |
 | Abstract: gcd "much larger than `H`" | `abstract_claim_false`, `not_gcd_much_larger` | **disproved** (`AbstractClaim.lean`) |
 
-The two deep external results (Lemmas 5 and 6) are stated in `Defs.lean` as `Prop`s and are
-passed as explicit hypotheses rather than axioms. Lemma 6 is stated as the paper quotes it.
-Lemma 5 (`BakerHarman`) is stated in a slightly weaker form: the vector must have positive
+Lemma 5 (`BakerHarman`) remains an explicit hypothesis of Theorem 1, rather than an axiom.
+It is stated in `Defs.lean` in a slightly weaker form: the vector must have positive
 entries, the constants are existentially quantified, and "sufficiently large `R`" becomes
 `R ≥ R₀`. Each change only weakens what is assumed.
+
+Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
+The proof uses the stronger quadratic Jacobsthal bound from
+[`openai/math`](https://github.com/openai/math/tree/1581d4cbdd69a0faf34b2089614fe2a814316a6a),
+whose 844-file dependency subset is included in [vendor/jacobsthal](vendor/jacobsthal/README.md).
+The vendored sources are unchanged and share this project's Lean/Mathlib 4.34.0;
+the first build compiles this substantial additional dependency.
+Run `python3 scripts/check_jacobsthal_sources.py` to verify source hashes and dependency
+closure, and `lake env lean scripts/CheckAxioms.lean` after building to audit the external
+theorem and all `ShiftedGcd` declarations against the standard-axiom allowlist.
 
 ## Deviations from the paper
 

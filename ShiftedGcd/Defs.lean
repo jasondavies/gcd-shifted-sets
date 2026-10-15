@@ -68,8 +68,8 @@ noncomputable def L (a : Fin n → ℤ) : ℕ :=
   sInf {H | ∃ h : Fin n → ℤ, height h = H ∧ PairwiseCoprimeVec (a + h)}
 
 /-- **Lemma 6** (Iwaniec, *On the problem of Jacobsthal*, 1978): if `m` consecutive integers are
-each divisible by one of `r ≥ 2` given primes, then `m ≪ (r log r)²`. This deep result is not
-proved here; it is taken as a hypothesis of Theorem 2. -/
+each divisible by one of `r ≥ 2` given primes, then `m ≪ (r log r)²`. Proved as
+`iwaniecBound` in `ShiftedGcd.Iwaniec` from a stronger quadratic Jacobsthal bound. -/
 def IwaniecBound : Prop :=
   ∃ C : ℝ, ∀ S : Finset ℕ, (∀ p ∈ S, p.Prime) → 2 ≤ S.card →
     ∀ (x : ℤ) (m : ℕ), (∀ k < m, ∃ p ∈ S, (p : ℤ) ∣ x + k) →
