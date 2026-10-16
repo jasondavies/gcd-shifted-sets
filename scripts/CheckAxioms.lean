@@ -22,7 +22,7 @@ run_cmd do
         throwError "Source module is not imported by the audit: {moduleName}"
   -- Module tables avoid scanning every declaration imported from Mathlib.
   let audited : Array Name := #[`ShiftedGcd, `BakerHarman, `BakerHarmanAnalytics,
-    `IwaniecLinearSieve, `PrimeNumberTheoremAnd, `Architect]
+    `IwaniecLinearSieve, `IwaniecLinearSieveVendor]
   -- A renamed library must not silently drop out of the audit.
   for pre in audited do
     unless env.header.moduleNames.any (pre.isPrefixOf ·) do
@@ -54,4 +54,4 @@ run_cmd do
     match env.getModuleIdxFor? name with
     | some idx => pre.isPrefixOf env.header.moduleNames[idx.toNat]!
     | none => false).size
-  logInfo m!"Audited {names.size} declarations ({countFrom `BakerHarmanAnalytics} Baker–Harman analytics, {countFrom `IwaniecLinearSieve} Iwaniec linear sieve, {countFrom `PrimeNumberTheoremAnd} prime number theorem); only propext, Classical.choice and Quot.sound found."
+  logInfo m!"Audited {names.size} declarations ({countFrom `BakerHarmanAnalytics} Baker–Harman analytics, {countFrom `IwaniecLinearSieve} Iwaniec linear sieve, {countFrom `IwaniecLinearSieveVendor} prime number theorem); only propext, Classical.choice and Quot.sound found."
