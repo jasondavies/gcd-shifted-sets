@@ -16,7 +16,7 @@ name = "ShiftedGcd"
 [[require]]
 name = "iwaniec_linear_sieve"
 git = "https://github.com/jasondavies/iwaniec-linear-sieve.git"
-rev = "7a62b22f639aaa331663763623febf8c59308496"
+rev = "e92ad5af49241449b68dbf0156e99b1b601e69b7"
 
 [[require]]
 name = "baker_harman_small_remainders"
