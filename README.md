@@ -12,8 +12,8 @@ result on uniform shifts, which is also formalised here:
 > polynomial irreducibility*, PhD thesis, UNSW Sydney, 2015,
 > [doi:10.26190/unsworks/18489](https://doi.org/10.26190/unsworks/18489).
 
-Lake fetches the standalone `baker-harman-small-remainders` library from its pinned
-Git revision automatically.
+Lake fetches the standalone `baker-harman-small-remainders` and `iwaniec-linear-sieve` libraries
+automatically.
 Build with `lake exe cache get && lake build`. There are no `sorry`s, and every main theorem
 depends only on the standard axioms `propext`, `Classical.choice` and `Quot.sound`.
 
@@ -22,7 +22,7 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 | Definitions (`𝔥`, `gcd`, `L`, `ℓ`, `R`, `κ`, `ϑ`) | `ShiftedGcd/Defs.lean` (`t(a)` is `tShift` in `UniformShift.lean`) | |
 | Claims about `κ(n,ε)` (existence, uniqueness, `ϑ > 0`) | `kappa_existsUnique`, `theta_pos` | proved |
 | Theorem 1 | `theorem1`, `theorem1_gcd` | proved unconditionally, with the original exponents |
-| Lemma 6 (Iwaniec) | `iwaniecBound` | proved from the vendored quadratic Jacobsthal bound |
+| Lemma 6 (Iwaniec) | `iwaniecBound` | proved, following Iwaniec's own proof (`iwaniec-linear-sieve` library) |
 | Theorem 2 | `theorem2`, `theorem2_L` | proved unconditionally |
 | Theorem 3 | `theorem3`, `theorem3_ell` | proved unconditionally |
 | Theorem 4 | `theorem4` | proved unconditionally (with the divisor bound in `DivisorBound.lean`) |
@@ -30,7 +30,7 @@ depends only on the standard axioms `propext`, `Classical.choice` and `Quot.soun
 | Abstract: gcd "much larger than `H`" | `abstract_claim_false`, `not_gcd_much_larger` | **disproved** (`AbstractClaim.lean`) |
 
 Theorem 1 uses `BakerHarman.bakerHarman_equal_weights` from the standalone
-[Baker–Harman small-remainders library](https://github.com/jasondavies/baker-harman-small-remainders/tree/1d63f06c7e425af721967ee5c3e97af3b2b13101).
+[Baker–Harman small-remainders library](https://github.com/jasondavies/baker-harman-small-remainders/tree/777976573bf4b787b4714a6543ee6d823df740e0).
 For `n ≥ 2`, `K ≥ 1`, sufficiently large `Q,R`, `Q ≤ R^γ(K)`, and a nonnegative
 vector of Euclidean norm at most `R^K`, it supplies an integer modulus
 `R ≤ r ≤ 2QR` with every coordinate's nearest-integer error at most `Q^(-1/n)`.
@@ -51,16 +51,14 @@ selects all declarations defined in the imported `BakerHarman` and
 The dependency is pinned in `lakefile.toml` and `lake-manifest.json`; a sibling
 checkout is not required.
 
-Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean`.
-The proof uses the stronger quadratic Jacobsthal bound from
-[`openai/math`](https://github.com/openai/math/tree/1581d4cbdd69a0faf34b2089614fe2a814316a6a),
-whose 844-file dependency subset is included in [vendor/jacobsthal](vendor/jacobsthal/README.md).
-The vendored sources are unchanged and share this project's Lean/Mathlib 4.34.0;
-the first build compiles this substantial additional dependency.
-Run `python3 scripts/check_jacobsthal_sources.py` to verify source hashes and dependency
-closure. Run `lake env lean scripts/CheckAxioms.lean` after building to audit the
-external theorem and all project and Baker–Harman declarations against the
-standard-axiom allowlist.
+Lemma 6 (`IwaniecBound`) is stated as the paper quotes it and proved in `Iwaniec.lean` from
+`IwaniecLinearSieve.iwaniecBound` in the standalone `iwaniec-linear-sieve` library. That library
+formalises Iwaniec's proof: the shifted sieve of *On the problem of Jacobsthal* (1978) and the
+linear sieve at the sifting limit of *On the error term in the linear sieve* (1971). Its only
+analytic input beyond Mathlib is the prime number theorem with de la Vallée Poussin error term,
+vendored from PrimeNumberTheoremAnd. Run `lake env lean scripts/CheckAxioms.lean` after
+building to audit all project, Baker–Harman and Iwaniec linear sieve declarations (including the
+vendored prime number theorem) against the standard-axiom allowlist.
 
 ## Deviations from the paper
 

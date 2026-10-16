@@ -2,9 +2,10 @@ import ShiftedGcd
 import BakerHarman
 
 /-! Run with `lake env lean scripts/CheckAxioms.lean` after `lake build`.
-Reject nonstandard axioms in the external Jacobsthal theorem, the imported analytic
-declarations, and this project's modules, including declarations in other namespaces,
-private declarations, and generated declarations. -/
+Reject nonstandard axioms in this project's modules and in the imported Baker–Harman and
+Iwaniec linear sieve libraries (including their vendored analytic and prime number theorem
+sources), covering declarations in other namespaces, private declarations, and generated
+declarations. -/
 
 open Lean Elab Command in
 run_cmd do
@@ -20,10 +21,15 @@ run_cmd do
       unless env.header.moduleNames.contains moduleName do
         throwError "Source module is not imported by the audit: {moduleName}"
   -- Module tables avoid scanning every declaration imported from Mathlib.
-  let mut names : Array Name := #[``OAI.Erdos970.Erdos970Final.erdos_970_quadratic]
+  let audited : Array Name := #[`ShiftedGcd, `BakerHarman, `BakerHarmanAnalytics,
+    `IwaniecLinearSieve, `PrimeNumberTheoremAnd, `Architect]
+  -- A renamed library must not silently drop out of the audit.
+  for pre in audited do
+    unless env.header.moduleNames.any (pre.isPrefixOf ·) do
+      throwError "No imported module under {pre}"
+  let mut names : Array Name := #[]
   for moduleName in env.header.moduleNames, moduleData in env.header.moduleData do
-    if (`ShiftedGcd).isPrefixOf moduleName || (`BakerHarman).isPrefixOf moduleName ||
-        (`BakerHarmanAnalytics).isPrefixOf moduleName then
+    if audited.any (·.isPrefixOf moduleName) then
       names := names ++ moduleData.constNames
   let allowed : Array Name := #[``propext, ``Classical.choice, ``Quot.sound]
   -- Share one visited set across roots; inspect theorem and opaque bodies too.
@@ -44,8 +50,8 @@ run_cmd do
         dependencies := dependencies ++ value.ctors.toArray
       for dependency in dependencies do
         pending := pending.push (origin, dependency)
-  let analyticCount := names.filter fun name =>
+  let countFrom (pre : Name) := (names.filter fun name =>
     match env.getModuleIdxFor? name with
-    | some idx => (`BakerHarmanAnalytics).isPrefixOf env.header.moduleNames[idx.toNat]!
-    | none => false
-  logInfo m!"Audited {names.size} declarations ({analyticCount.size} analytics); only propext, Classical.choice and Quot.sound found."
+    | some idx => pre.isPrefixOf env.header.moduleNames[idx.toNat]!
+    | none => false).size
+  logInfo m!"Audited {names.size} declarations ({countFrom `BakerHarmanAnalytics} Baker–Harman analytics, {countFrom `IwaniecLinearSieve} Iwaniec linear sieve, {countFrom `PrimeNumberTheoremAnd} prime number theorem); only propext, Classical.choice and Quot.sound found."

@@ -8,16 +8,17 @@ autoImplicit = false
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
-rev = "v4.34.0"
+rev = "v4.35.0"
 
 [[lean_lib]]
 name = "ShiftedGcd"
 
 [[require]]
-name = "jacobsthal"
-path = "vendor/jacobsthal"
+name = "iwaniec_linear_sieve"
+git = "https://github.com/jasondavies/iwaniec-linear-sieve.git"
+rev = "dc7ab6396d1dcc9a429e6e5b4fa5308ddfa4dea6"
 
 [[require]]
 name = "baker_harman_small_remainders"
 git = "https://github.com/jasondavies/baker-harman-small-remainders"
-rev = "1d63f06c7e425af721967ee5c3e97af3b2b13101"
+rev = "777976573bf4b787b4714a6543ee6d823df740e0"
